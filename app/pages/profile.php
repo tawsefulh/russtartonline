@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$errors) {
         $avatar = $user['avatar'];
-        if ($photo || post('avatar_remove') === '1') {
+        if ($photo) {
             delete_upload($user['avatar']);
             $avatar = $photo;
         }

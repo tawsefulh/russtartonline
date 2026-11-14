@@ -249,6 +249,8 @@ return [
     'Add a profile photo' => 'Добавить фото профиля',
     'Change photo' => 'Сменить фото',
     'Remove photo' => 'Удалить фото',
+    'Remove your profile photo?' => 'Удалить фото профиля?',
+    'Photo removed.' => 'Фото удалено.',
     'JPG, PNG or WebP, up to 3 MB. You can move and zoom it after choosing.' => 'JPG, PNG или WebP, до 3 МБ. После выбора фото можно сдвинуть и увеличить.',
     'Adjust your photo' => 'Настройте фото',
     'Drag the photo to move it. Zoom with the slider or your mouse wheel.' => 'Перетащите фото, чтобы сдвинуть его. Увеличивайте ползунком или колёсиком мыши.',

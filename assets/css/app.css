@@ -686,6 +686,8 @@ button.avatar:has(img) { padding: 0; overflow: hidden; background: var(--mist); 
 .photo-pick:focus-within .photo-preview { outline: 3px solid var(--orange); outline-offset: 6px; }
 .photo-pick .upload-text strong { color: var(--navy); }
 .photo-field .field-error { flex-basis: 100%; }
+.photo-remove { margin-left: auto; }
+.photo-remove[hidden] { display: none; }
 
 /* photo editor */
 .photo-editor {

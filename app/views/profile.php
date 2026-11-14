@@ -17,11 +17,8 @@
                         </span>
                     </label>
                     <?php if ($user['avatar']): ?>
-                        <label class="check photo-remove">
-                            <input type="checkbox" name="avatar_remove" value="1">
-                            <span class="check-box" aria-hidden="true"></span>
-                            <?= et('Remove photo') ?>
-                        </label>
+                        <button class="btn btn-danger btn-sm photo-remove" type="submit" formaction="<?= url('profile/photo/remove') ?>" formnovalidate
+                                data-remove-photo data-confirm-text="<?= et('Remove your profile photo?') ?>" data-add-text="<?= et('Add a profile photo') ?>"><?= et('Remove photo') ?></button>
                     <?php endif ?>
                     <?= field_error('avatar') ?>
                 </div>

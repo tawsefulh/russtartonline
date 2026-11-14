@@ -36,6 +36,7 @@ $routes = [
     '#^/me$#'                         => 'me',
     '#^/me/ads$#'                     => 'me_ads',
     '#^/profile$#'                    => 'profile',
+    '#^/profile/photo/remove$#'       => 'photo_remove',
     '#^/security$#'                   => 'security',
     '#^/login/verify$#'               => 'login_verify',
     '#^/account-deactivated$#'        => 'deactivated',

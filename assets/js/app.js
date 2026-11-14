@@ -540,6 +540,32 @@
         });
     });
 
+    // Remove photo: works at once in the background, other unsaved changes on the page stay
+    $$('[data-remove-photo]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (btn.dataset.confirmText && !window.confirm(btn.dataset.confirmText)) return;
+            const form = btn.form;
+            const body = new FormData();
+            body.append('_csrf', form.querySelector('[name="_csrf"]').value);
+            btn.disabled = true;
+            fetch(btn.formAction, { method: 'POST', body, credentials: 'same-origin', headers: { Accept: 'application/json' } })
+                .then((r) => (r.ok ? r.json() : Promise.reject()))
+                .then((data) => {
+                    const preview = $('.photo-preview', form);
+                    preview.removeAttribute('style');
+                    preview.innerHTML = `<b>${data.initials}</b>`;
+                    const headerBtn = $('button.avatar');
+                    const headerImg = headerBtn && $('img', headerBtn);
+                    if (headerImg) headerImg.replaceWith(document.createTextNode(data.initials));
+                    const title = $('.photo-pick .upload-text strong', form);
+                    if (title && btn.dataset.addText) title.textContent = btn.dataset.addText;
+                    btn.hidden = true;
+                })
+                .catch(() => { btn.disabled = false; form.action = btn.formAction; form.submit(); });
+        });
+    });
+
     // confirm before deleting
     $$('form[data-confirm]').forEach((form) => {
         form.addEventListener('submit', (e) => { if (!window.confirm(form.dataset.confirm)) e.preventDefault(); });
