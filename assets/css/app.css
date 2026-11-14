@@ -553,6 +553,9 @@ button.avatar:has(img) { padding: 0; overflow: hidden; background: var(--mist); 
 .field-box :is(input, textarea):focus { border-color: var(--navy); }
 .field-box input[type="search"]::-webkit-search-cancel-button { display: none; }
 
+.field-box input[readonly] { background: var(--mist); color: var(--ink-soft); border-color: var(--line); cursor: not-allowed; }
+.field-box input[readonly] ~ label { transform: translateY(-11px) scale(.76); }
+
 .field-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); padding: 8px 12px; border: 0; border-radius: 8px; background: none; color: var(--navy); font-weight: 600; font-size: .875rem; cursor: pointer; }
 .field-toggle:hover { background: var(--mist); }
 
@@ -683,6 +686,28 @@ button.avatar:has(img) { padding: 0; overflow: hidden; background: var(--mist); 
 .photo-pick:focus-within .photo-preview { outline: 3px solid var(--orange); outline-offset: 6px; }
 .photo-pick .upload-text strong { color: var(--navy); }
 .photo-field .field-error { flex-basis: 100%; }
+
+/* photo editor */
+.photo-editor {
+    width: min(420px, calc(100% - 32px)); padding: 28px; border: 0; border-radius: var(--radius-lg);
+    background: var(--white); color: var(--ink); box-shadow: 0 40px 90px -30px rgba(8, 26, 38, .6);
+}
+.photo-editor[open] { animation: rise var(--mid) var(--ease) both; }
+.photo-editor::backdrop { background: rgba(10, 30, 45, .55); backdrop-filter: blur(3px); }
+.photo-editor h2 { font-size: 1.25rem; }
+.photo-editor > p { margin: 6px 0 20px; color: var(--ink-soft); font-size: .9375rem; }
+.crop {
+    position: relative; width: min(300px, 100%); aspect-ratio: 1; margin: 0 auto; overflow: hidden;
+    border-radius: 18px; background: var(--ink); cursor: grab; touch-action: none; user-select: none;
+}
+.crop.dragging { cursor: grabbing; }
+.crop img { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; pointer-events: none; }
+/* everything outside the circle is dimmed: that part is cut off */
+.crop-ring { position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 999px rgba(10, 30, 45, .55); outline: 2px solid rgba(253, 253, 253, .9); outline-offset: -2px; pointer-events: none; }
+.crop:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.zoom { display: flex; align-items: center; gap: 14px; margin: 22px auto 0; width: min(300px, 100%); font-weight: 600; font-size: .9375rem; }
+.zoom input { flex: 1; accent-color: var(--navy); }
+.photo-editor-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
 
 .upload-text small { display: block; color: var(--ink-soft); font-size: .8125rem; margin-top: 2px; }
 

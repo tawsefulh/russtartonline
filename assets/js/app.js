@@ -433,6 +433,113 @@
         });
     });
 
+    // profile photo: choose a picture, then move and zoom it inside the circle; the cropped square is uploaded
+    $$('[data-avatar-editor]').forEach((pick) => {
+        const input = $('input[type="file"]', pick);
+        const preview = $('.photo-preview', pick);
+        const nameLine = $('[data-upload-name]', pick);
+        const dialog = pick.closest('form').querySelector('.photo-editor');
+        if (!input || !dialog || !window.HTMLDialogElement) return;
+
+        const crop = $('.crop', dialog);
+        const img = $('img', crop);
+        const zoom = $('input[type="range"]', dialog);
+        const original = { bg: preview.style.backgroundImage, html: preview.innerHTML, name: nameLine.textContent };
+        let state = null;                       // { w, h, base, scale, x, y } : image size, cover scale, zoom, offset
+        let chosen = null;                      // the file the person picked
+
+        const size = () => crop.clientWidth;
+        const clamp = () => {                   // keep the circle filled: the picture may not slide past its edges
+            const s = size(), w = state.w * state.base * state.scale, h = state.h * state.base * state.scale;
+            state.x = Math.min(0, Math.max(s - w, state.x));
+            state.y = Math.min(0, Math.max(s - h, state.y));
+        };
+        const draw = () => {
+            clamp();
+            img.style.width = `${state.w * state.base * state.scale}px`;
+            img.style.transform = `translate(${state.x}px, ${state.y}px)`;
+        };
+        const zoomTo = (value, cx = size() / 2, cy = size() / 2) => {
+            const next = Math.min(4, Math.max(1, value));
+            const ratio = next / state.scale;
+            state.x = cx - (cx - state.x) * ratio;   // zoom around the pointer (or the centre)
+            state.y = cy - (cy - state.y) * ratio;
+            state.scale = next;
+            zoom.value = next;
+            draw();
+        };
+
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+            chosen = file;
+            img.onload = () => {
+                dialog.showModal();
+                const s = size();
+                state = { w: img.naturalWidth, h: img.naturalHeight, scale: 1 };
+                state.base = s / Math.min(state.w, state.h);
+                state.x = (s - state.w * state.base) / 2;
+                state.y = (s - state.h * state.base) / 2;
+                zoom.value = 1;
+                draw();
+                crop.focus();
+            };
+            img.src = URL.createObjectURL(file);
+        });
+
+        // drag with mouse, finger or pen
+        let drag = null;
+        crop.addEventListener('pointerdown', (e) => { drag = { x: e.clientX - state.x, y: e.clientY - state.y }; crop.setPointerCapture(e.pointerId); crop.classList.add('dragging'); });
+        crop.addEventListener('pointermove', (e) => { if (!drag) return; state.x = e.clientX - drag.x; state.y = e.clientY - drag.y; draw(); });
+        const stop = () => { drag = null; crop.classList.remove('dragging'); };
+        crop.addEventListener('pointerup', stop);
+        crop.addEventListener('pointercancel', stop);
+        crop.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const r = crop.getBoundingClientRect();
+            zoomTo(state.scale * (e.deltaY < 0 ? 1.08 : 1 / 1.08), e.clientX - r.left, e.clientY - r.top);
+        }, { passive: false });
+        crop.addEventListener('keydown', (e) => {
+            const moves = { ArrowLeft: [10, 0], ArrowRight: [-10, 0], ArrowUp: [0, 10], ArrowDown: [0, -10] };
+            if (moves[e.key]) { e.preventDefault(); state.x += moves[e.key][0]; state.y += moves[e.key][1]; draw(); }
+            if (e.key === '+' || e.key === '=') zoomTo(state.scale + 0.1);
+            if (e.key === '-') zoomTo(state.scale - 0.1);
+        });
+        zoom.addEventListener('input', () => zoomTo(parseFloat(zoom.value)));
+
+        const restore = () => {
+            input.value = '';
+            chosen = null;
+            preview.style.backgroundImage = original.bg;
+            preview.innerHTML = original.html;
+            nameLine.textContent = original.name;
+        };
+        $('[data-crop-cancel]', dialog).addEventListener('click', () => { restore(); dialog.close(); });
+        dialog.addEventListener('cancel', () => restore());     // Esc key
+
+        $('[data-crop-use]', dialog).addEventListener('click', () => {
+            // draw exactly what is inside the circle onto a 512 x 512 square
+            const out = document.createElement('canvas');
+            out.width = out.height = 512;
+            const k = state.base * state.scale;                 // screen pixels per image pixel
+            const s = size();
+            out.getContext('2d').drawImage(img, -state.x / k, -state.y / k, s / k, s / k, 0, 0, 512, 512);
+            out.toBlob((blob) => {
+                if (!blob) { dialog.close(); return; }
+                const file = new File([blob], (chosen.name.replace(/\.[^.]+$/, '') || 'photo') + '.jpg', { type: 'image/jpeg' });
+                try {
+                    const dt = new DataTransfer();
+                    dt.items.add(file);
+                    input.files = dt.files;
+                } catch (err) { /* very old browser: the original picture is uploaded uncropped */ }
+                preview.style.backgroundImage = `url(${URL.createObjectURL(blob)})`;
+                preview.textContent = '';
+                nameLine.textContent = chosen.name;
+                dialog.close();
+            }, 'image/jpeg', 0.9);
+        });
+    });
+
     // confirm before deleting
     $$('form[data-confirm]').forEach((form) => {
         form.addEventListener('submit', (e) => { if (!window.confirm(form.dataset.confirm)) e.preventDefault(); });
