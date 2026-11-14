@@ -137,11 +137,11 @@ function valid_email(string $email): bool
         && preg_match('/@[^@\s]+\.[a-z]{2,}$/i', $email) === 1;
 }
 
-/** New passwords: at least 8 characters with one small and one capital letter. */
+/** New passwords: at least 8 characters with one small letter, one capital letter and one number. */
 function password_problem(string $password): ?string
 {
-    if (mb_strlen($password) < 8 || !preg_match('/\p{Ll}/u', $password) || !preg_match('/\p{Lu}/u', $password)) {
-        return t('Use at least 8 characters, with at least one small and one capital letter.');
+    if (mb_strlen($password) < 8 || !preg_match('/\p{Ll}/u', $password) || !preg_match('/\p{Lu}/u', $password) || !preg_match('/\d/', $password)) {
+        return t('Use at least 8 characters, with at least one small letter, one capital letter and one number.');
     }
     return null;
 }

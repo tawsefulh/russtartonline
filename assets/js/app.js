@@ -452,6 +452,7 @@
             length: (v) => [...v].length >= 8,
             lower: (v) => /\p{Ll}/u.test(v),
             upper: (v) => /\p{Lu}/u.test(v),
+            number: (v) => /\d/.test(v),
         };
         const update = () => {
             let all = true;
