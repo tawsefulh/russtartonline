@@ -1,5 +1,6 @@
--- RusStart database schema + default data.
--- Import this once into an empty database (phpMyAdmin > Import).
+-- Migration 0001: all tables, default cities and categories.
+-- Safe to run on an existing database: tables are only created when missing,
+-- default rows are only added when missing.
 
 SET NAMES utf8mb4;
 

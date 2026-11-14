@@ -15,9 +15,18 @@ Built with plain PHP 8 and MySQL/MariaDB, so it runs on XAMPP and on ordinary PH
 
 1. Start **Apache** and **MySQL** in the XAMPP control panel.
 2. Put this folder in `C:\xampp\htdocs\russtart` (or link it there).
-3. Create a database called `russtart` and import `database/schema.sql` (phpMyAdmin > Import).
+3. Create an empty database called `russtart` (phpMyAdmin > New). The tables, default cities and categories, and the demo content are created automatically on the first visit.
 4. Check the database settings in `config/config.php`. To change them without touching that file, copy `config/config.local.example.php` to `config/config.local.php`.
 5. Open <http://localhost/russtart/>.
+
+## Database migrations
+
+Every file in `database/migrations` runs once, in order, and is recorded in the `migrations` table. They run automatically on the first page visit after a new file appears, or by hand with `php database/migrate.php`.
+
+- `0001_initial_schema.sql`: all tables, default cities and categories.
+- `0002_demo_content.php`: demo students, articles and advertisements (only while `'demo_data' => true`). Demo accounts use `@russtart.demo` emails and random passwords. Remove all demo content with `DELETE FROM users WHERE email LIKE '%@russtart.demo';`
+
+To change the database later, add a new file such as `0003_add_something.sql`.
 
 ## Password reset emails
 
@@ -28,9 +37,9 @@ To send real emails, set `mail` in `config/config.local.php` (see `config.local.
 ## Put it online
 
 1. Upload everything except `.git` into the host's `htdocs` folder.
-2. Import `database/schema.sql` into the host's database.
+2. Create an empty database in the host's control panel. The tables are created on the first visit.
 3. Create `config/config.local.php` on the host with its database details, the mail settings and `'debug' => false`.
-4. If the database already exists from an older version, import `database/schema.sql` again (it only adds missing tables), then `database/upgrade-2026-11-account.sql` once.
+4. Updates to the database run by themselves: upload the new files and open the site once.
 
 ## Folders
 
@@ -43,5 +52,5 @@ To send real emails, set `mail` in `config/config.local.php` (see `config.local.
 | `assets` | CSS, JavaScript, logo |
 | `lang` | Russian translations (`ru.php`). Text missing there shows in English |
 | `config` | Settings (database, email, main city) |
-| `database` | Schema and default cities and categories |
+| `database` | Migrations (tables, default data, demo content) and `migrate.php` |
 | `uploads` | Images uploaded by members |

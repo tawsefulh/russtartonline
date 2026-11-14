@@ -410,7 +410,7 @@ button.avatar:has(img) { padding: 0; overflow: hidden; background: var(--mist); 
 .story-excerpt { margin-top: 12px; color: var(--ink-soft); max-width: 66ch; }
 .byline { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 18px; font-size: .875rem; color: var(--ink-soft); }
 .byline time { margin-left: auto; white-space: nowrap; }
-.story .byline time { margin-left: 6px; padding-left: 14px; border-left: 1px solid var(--line); }
+.story .byline time { margin-left: 4px; color: #6F8794; }
 
 /* home: one lead story, the rest beside it */
 .stories-home { grid-template-columns: 1.1fr 1fr; column-gap: 64px; }

@@ -31,6 +31,12 @@ $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
 define('IS_HTTPS', $https);
 define('ORIGIN', ($https ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost'));
 
+// Basic browser protections
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+
 session_name('russtart');
 session_set_cookie_params([
     'lifetime' => 0,
@@ -49,6 +55,10 @@ require ROOT . '/app/queries.php';
 require ROOT . '/app/mail.php';
 require ROOT . '/app/twofactor.php';
 require ROOT . '/app/sessions.php';
+require ROOT . '/app/migrate.php';
+
+// Create or update the database tables when new migration files appear
+run_migrations();
 
 // Restore a "keep me logged in" visitor before any page output starts
 current_user();

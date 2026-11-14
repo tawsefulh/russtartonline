@@ -31,8 +31,14 @@ $config = [
         'smtp'      => ['host' => 'smtp.gmail.com', 'port' => 587, 'secure' => 'tls', 'user' => '', 'pass' => ''],
     ],
 
-    // Show detailed PHP errors (turn off in production)
-    'debug' => true,
+    // Add the demo students, articles and advertisements (database/migrations/0002_demo_content.php).
+    // They are added once. To remove them later run:  DELETE FROM users WHERE email LIKE '%@russtart.demo';
+    'demo_data' => true,
+
+    // Show detailed PHP errors. On by default only on your own computer (localhost);
+    // set it in config.local.php to override.
+    'debug' => in_array($_SERVER['HTTP_HOST'] ?? 'localhost', ['localhost', '127.0.0.1'], true)
+        || str_starts_with($_SERVER['HTTP_HOST'] ?? '', 'localhost:'),
 ];
 
 $local = __DIR__ . '/config.local.php';

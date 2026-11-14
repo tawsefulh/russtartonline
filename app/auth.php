@@ -73,7 +73,7 @@ function redirect_after_login(): void
 {
     $to = $_SESSION['after_login'] ?? null;
     unset($_SESSION['after_login']);
-    if ($to && str_starts_with($to, BASE_URL . '/') && !str_starts_with($to, '//')) {
+    if (is_string($to) && str_starts_with($to, BASE_URL . '/') && !preg_match('#^/[/\\\\]#', $to)) {
         header('Location: ' . $to);
         exit;
     }
