@@ -8,7 +8,7 @@ $sent = false;
 $devLink = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = mb_strtolower(post('email'));
+    $email = preg_replace('/\s+/', '', mb_strtolower(post('email')));
 
     // a few requests per visitor every 15 minutes
     $now = time();

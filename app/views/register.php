@@ -10,8 +10,8 @@
         <form method="post" action="<?= url('register') ?>" novalidate data-check-url="<?= url('check') ?>">
             <?= csrf_field() ?>
             <?= field('name', t('Full name'), ['required' => true, 'attrs' => ' autocomplete="name" maxlength="100"']) ?>
-            <?= field('username', t('Username'), ['required' => true, 'attrs' => ' autocomplete="username" maxlength="30" autocapitalize="none" spellcheck="false" data-check="username"', 'hint' => t('At least 4 characters. Small letters, numbers and _ only, starting with a letter.')]) ?>
-            <?= field('email', t('Email'), ['type' => 'email', 'required' => true, 'attrs' => ' autocomplete="email" spellcheck="false" data-check="email"']) ?>
+            <?= field('username', t('Username'), ['required' => true, 'attrs' => ' autocomplete="username" maxlength="30" autocapitalize="none" spellcheck="false" data-check="username"', 'hint' => t('At least 4 characters. Small letters and numbers only.')]) ?>
+            <?= field('email', t('Email'), ['type' => 'email', 'required' => true, 'attrs' => ' autocomplete="email" spellcheck="false" data-check="email" autocapitalize="none"']) ?>
             <?= field('password', t('Password'), ['type' => 'password', 'required' => true, 'attrs' => ' autocomplete="new-password" minlength="8" data-password-rules']) ?>
             <?php partial('password_rules') ?>
             <button class="btn btn-primary btn-block" type="submit"><?= et('Create account') ?></button>

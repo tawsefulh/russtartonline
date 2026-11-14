@@ -18,7 +18,7 @@ if (count($_SESSION['checks']) >= 60) {
 $_SESSION['checks'][] = $now;
 
 $field = query('field');
-$value = mb_strtolower(query('value'));
+$value = preg_replace('/\s+/', '', mb_strtolower(query('value')));
 
 // A signed-in person's own username and email count as free
 $me = current_user();

@@ -237,8 +237,8 @@ return [
     'Reset links work for one hour and only once. Ask for a new one and use the latest email.' => 'Ссылка для восстановления действует один час и только один раз. Запросите новую и откройте последнее письмо.',
     'Send a new link' => 'Отправить новую ссылку',
 
-    'At least 4 characters. Small letters, numbers and _ only, starting with a letter.' => 'Не меньше 4 символов. Только строчные латинские буквы, цифры и _, начиная с буквы.',
-    'Use at least 4 characters: small letters, numbers or _, starting with a letter.' => 'Не меньше 4 символов: строчные латинские буквы, цифры или _, начиная с буквы.',
+    'At least 4 characters. Small letters and numbers only.' => 'Не меньше 4 символов. Только строчные латинские буквы и цифры.',
+    'Use at least 4 characters: small letters and numbers only.' => 'Не меньше 4 символов: только строчные латинские буквы и цифры.',
     'Use at least 8 characters, with at least one small and one capital letter.' => 'Не меньше 8 символов, хотя бы одна строчная и одна заглавная буква.',
     'Password rules' => 'Требования к паролю',
     'At least 8 characters' => 'Не меньше 8 символов',

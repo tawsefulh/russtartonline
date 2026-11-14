@@ -70,8 +70,8 @@ function google_enabled(): bool
 
 function validate_username(string $username, ?int $ignoreId = null): ?string
 {
-    if (!preg_match('/^[a-z][a-z0-9_]{3,29}$/', $username)) {
-        return t('Use at least 4 characters: small letters, numbers or _, starting with a letter.');
+    if (!preg_match('/^[a-z0-9]{4,30}$/', $username)) {
+        return t('Use at least 4 characters: small letters and numbers only.');
     }
     $taken = q('SELECT id FROM users WHERE username = ? AND id <> ?', [$username, $ignoreId ?? 0])->fetch();
     return $taken ? t('That username is taken. Try another.') : null;

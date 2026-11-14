@@ -476,6 +476,23 @@
 
     /* ---------- live username / email check on sign-up ---------- */
 
+    // what each box accepts while typing: username = small letters and numbers, email = lowercase, no spaces
+    const CLEAN = {
+        username: (v) => v.toLowerCase().replace(/[^a-z0-9]/g, ''),
+        email: (v) => v.toLowerCase().replace(/\s+/g, ''),
+    };
+
+    // replace the box's text, keeping the cursor where the person was typing
+    const cleanInput = (input, clean) => {
+        const before = input.value;
+        const after = clean(before);
+        if (after === before) return;
+        const pos = input.selectionStart ?? before.length;
+        input.value = after;
+        const newPos = clean(before.slice(0, pos)).length;
+        try { input.setSelectionRange(newPos, newPos); } catch (err) { /* email inputs do not support it */ }
+    };
+
     $$('form[data-check-url]').forEach((form) => {
         const endpoint = form.dataset.checkUrl;
         const results = {};                                   // field name -> true / false / null (not checked)
@@ -484,73 +501,84 @@
             const kind = input.dataset.check;
             const field = input.closest('.field');
             const hint = $('.field-hint', field);
+            // one fixed line under the box: it starts as the hint and is then replaced by the result,
+            // so nothing below it moves while the person types
             let status = $('.field-status', field);
             if (!status) {
                 status = el('p', { class: 'field-status', 'aria-live': 'polite', hidden: '' });
-                $('.field-box', field).after(status);
+                (hint || $('.field-box', field)).after(status);
             }
             let timer = null;
             let controller = null;
             let lastValue = null;
 
             const show = (state, message) => {
-                status.className = 'field-status' + (state ? ` is-${state}` : '');
+                if (state === null) {                        // back to the plain hint
+                    status.hidden = true;
+                    if (hint) hint.hidden = false;
+                    field.classList.remove('is-valid', 'has-error');
+                    input.removeAttribute('aria-invalid');
+                    return;
+                }
+                if (state === 'checking') {                  // keep the last message, only swap the icon
+                    status.classList.add('is-checking');
+                    if (status.hidden) {
+                        status.textContent = TEXT.checking || 'Checking…';
+                        status.hidden = false;
+                        if (hint) hint.hidden = true;
+                    }
+                    return;
+                }
+                status.className = 'field-status is-' + state;
                 status.textContent = message || '';
-                status.hidden = !state;
+                status.hidden = false;
+                if (hint) hint.hidden = true;
                 field.classList.toggle('is-valid', state === 'ok');
                 field.classList.toggle('has-error', state === 'bad');
                 input.setAttribute('aria-invalid', state === 'bad' ? 'true' : 'false');
-                if (hint) hint.hidden = state === 'ok' || state === 'bad';
             };
 
             const run = () => {
-                const value = input.value.trim().toLowerCase();
+                const value = CLEAN[kind] ? CLEAN[kind](input.value) : input.value.trim().toLowerCase();
                 if (value === lastValue) return;
                 lastValue = value;
                 if (controller) controller.abort();
                 if (value === '') { results[kind] = null; show(null); return; }
 
-                // obvious problems are shown without asking the server
-                if (kind === 'email' && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(value)) {
-                    if (document.activeElement === input) { show(null); results[kind] = null; return; }
-                }
-
-                show('checking', TEXT.checking || 'Checking…');
+                show('checking');
                 controller = new AbortController();
                 fetch(`${endpoint}?field=${encodeURIComponent(kind)}&value=${encodeURIComponent(value)}`, {
                     signal: controller.signal, headers: { Accept: 'application/json' }, credentials: 'same-origin',
                 })
                     .then((r) => (r.ok ? r.json() : null))
                     .then((data) => {
-                        if (!data || data.ok === null) { show(null); results[kind] = null; return; }
+                        if (!data || data.ok === null) { results[kind] = null; show(null); return; }
                         results[kind] = data.ok;
                         show(data.ok ? 'ok' : 'bad', data.message);
                     })
-                    .catch((err) => { if (err.name !== 'AbortError') { show(null); results[kind] = null; } });
+                    .catch((err) => { if (err.name !== 'AbortError') { results[kind] = null; show(null); } });
             };
 
             input.addEventListener('input', () => {
-                if (kind === 'username') {
-                    const pos = input.selectionStart;
-                    const lower = input.value.toLowerCase();
-                    if (lower !== input.value) { input.value = lower; input.setSelectionRange(pos, pos); }
-                }
+                if (CLEAN[kind]) cleanInput(input, CLEAN[kind]);
                 $$('.field-error', field).forEach((e) => e.remove());   // the server's old message no longer applies
                 clearTimeout(timer);
-                timer = setTimeout(run, 450);
+                // an email is only checked once it looks complete, or when the person leaves the box
+                const wait = kind === 'email' && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(input.value);
+                if (!wait) timer = setTimeout(run, 450);
             });
-            input.addEventListener('blur', () => { clearTimeout(timer); lastValue = lastValue === null ? null : lastValue; run(); });
+            input.addEventListener('blur', () => { clearTimeout(timer); run(); });
             if (input.value.trim() !== '' && !$('.field-error', field)) run();
         });
 
         // do not send the form while a checked field is known to be taken or invalid
         form.addEventListener('submit', (e) => {
             const bad = $$('[data-check]', form).find((input) => results[input.dataset.check] === false);
-            if (bad) { e.preventDefault(); bad.focus(); bad.closest('.field').scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+            if (bad) { e.preventDefault(); bad.focus(); }
         });
     });
 
     // bring the first field with an error into view
     const firstError = $('.has-error');
-    if (firstError) firstError.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (firstError) firstError.scrollIntoView({ block: 'nearest' });
 })();

@@ -554,7 +554,7 @@ button.avatar:hover, button.avatar[aria-expanded="true"] { box-shadow: 0 0 0 4px
 .field-toggle:hover { background: var(--mist); }
 
 .field-hint { margin-top: 7px; font-size: .8125rem; color: var(--ink-soft); padding-left: 4px; }
-.field-error { margin-top: 7px; font-size: .875rem; font-weight: 500; color: var(--danger); padding-left: 4px; animation: rise var(--mid) var(--ease) both; }
+.field-error { margin-top: 7px; font-size: .875rem; font-weight: 500; color: var(--danger); padding-left: 4px; }
 .has-error .field-box :is(input, textarea), .has-error .select-btn { border-color: var(--danger); }
 
 /* password checklist: each rule ticks green as it is met */
@@ -579,7 +579,7 @@ button.avatar:hover, button.avatar[aria-expanded="true"] { box-shadow: 0 0 0 4px
 .field-status {
     display: flex; align-items: center; gap: 8px; margin-top: 7px; padding-left: 4px;
     font-size: .875rem; font-weight: 500; color: var(--ink-soft);
-    animation: rise var(--mid) var(--ease) both;
+    min-height: 1.3em;
 }
 .field-status[hidden] { display: none; }
 .field-status::before { content: ""; flex: none; width: 14px; height: 14px; border-radius: 50%; }
