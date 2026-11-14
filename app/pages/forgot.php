@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $now = time();
     $_SESSION['resets'] = array_values(array_filter($_SESSION['resets'] ?? [], fn($t) => $t > $now - 900));
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!valid_email($email)) {
         $errors['email'] = t('Enter a valid email address.');
     } elseif (count($_SESSION['resets']) >= 5) {
         $errors['email'] = t('Too many requests. Wait a few minutes and try again.');

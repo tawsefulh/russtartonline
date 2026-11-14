@@ -557,6 +557,24 @@ button.avatar:hover, button.avatar[aria-expanded="true"] { box-shadow: 0 0 0 4px
 .field-error { margin-top: 7px; font-size: .875rem; font-weight: 500; color: var(--danger); padding-left: 4px; animation: rise var(--mid) var(--ease) both; }
 .has-error .field-box :is(input, textarea), .has-error .select-btn { border-color: var(--danger); }
 
+/* password checklist: each rule ticks green as it is met */
+.field:has(+ .pw-rules) { margin-bottom: 10px; }
+.pw-rules { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 22px; padding-left: 4px; font-size: .8125rem; color: var(--ink-soft); }
+.pw-rules li { display: inline-flex; align-items: center; gap: 7px; transition: color var(--mid) var(--ease); }
+.pw-rules li::before {
+    content: ""; flex: none; width: 14px; height: 14px; border-radius: 50%;
+    border: 1.5px solid #AFC9D4; background: var(--white) center / 14px no-repeat;
+    transition: background-color var(--mid) var(--ease), border-color var(--mid) var(--ease), transform var(--mid) var(--ease);
+}
+.pw-rules li.is-met { color: #1F8F5A; }
+.pw-rules li.is-met::before {
+    border-color: #1F8F5A; transform: scale(1.08);
+    background-color: #1F8F5A;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3.5 7.2l2.3 2.3 4.7-4.9' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.pw-rules.is-short li:not(.is-met) { color: var(--danger); }
+.pw-rules.is-short li:not(.is-met)::before { border-color: var(--danger); }
+
 /* live username / email check under the field */
 .field-status {
     display: flex; align-items: center; gap: 8px; margin-top: 7px; padding-left: 4px;
@@ -784,10 +802,9 @@ button.avatar:hover, button.avatar[aria-expanded="true"] { box-shadow: 0 0 0 4px
 .site-footer nav a { display: block; width: fit-content; padding: 5px 0; color: inherit; text-decoration: none; transition: color var(--mid) var(--ease), transform var(--mid) var(--ease); }
 .site-footer nav a:hover { color: var(--teal); transform: translateX(6px); }
 .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px; margin-top: 64px; padding: 24px 0 28px; border-top: 1px solid rgba(253, 253, 253, .14); font-size: .875rem; }
-.footer-credit { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; color: rgba(253, 253, 253, .78); }
-.footer-credit strong { color: var(--teal); font-weight: 700; }
-.footer-credit a { color: #FF7A45; font-weight: 600; text-underline-offset: 3px; transition: color var(--mid) var(--ease); }
-.footer-credit a:hover { color: var(--white); }
+.footer-credit { color: rgba(253, 253, 253, .78); }
+.footer-credit a { color: var(--teal); font-weight: 700; text-decoration: none; transition: color var(--mid) var(--ease); }
+.footer-credit a:hover { color: #FF7A45; text-decoration: underline; text-underline-offset: 3px; }
 
 /* footer reveal: the page slides up like a sheet and uncovers the footer underneath */
 @media (min-width: 900px) and (min-height: 620px) {

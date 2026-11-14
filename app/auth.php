@@ -70,8 +70,8 @@ function google_enabled(): bool
 
 function validate_username(string $username, ?int $ignoreId = null): ?string
 {
-    if (!preg_match('/^[a-z0-9_]{3,30}$/', $username)) {
-        return t('Use 3 to 30 lowercase letters, numbers or underscores.');
+    if (!preg_match('/^[a-z][a-z0-9_]{3,29}$/', $username)) {
+        return t('Use at least 4 characters: small letters, numbers or _, starting with a letter.');
     }
     $taken = q('SELECT id FROM users WHERE username = ? AND id <> ?', [$username, $ignoreId ?? 0])->fetch();
     return $taken ? t('That username is taken. Try another.') : null;
@@ -127,4 +127,21 @@ function remember_forget(): void
         q('DELETE FROM remember_tokens WHERE selector = ?', [$m[1]]);
     }
     remember_set_cookie('', time() - 3600);
+}
+
+/** A real-looking address: something@domain.tld */
+function valid_email(string $email): bool
+{
+    return strlen($email) <= 190
+        && filter_var($email, FILTER_VALIDATE_EMAIL) !== false
+        && preg_match('/@[^@\s]+\.[a-z]{2,}$/i', $email) === 1;
+}
+
+/** New passwords: at least 8 characters with one small and one capital letter. */
+function password_problem(string $password): ?string
+{
+    if (mb_strlen($password) < 8 || !preg_match('/\p{Ll}/u', $password) || !preg_match('/\p{Lu}/u', $password)) {
+        return t('Use at least 8 characters, with at least one small and one capital letter.');
+    }
+    return null;
 }

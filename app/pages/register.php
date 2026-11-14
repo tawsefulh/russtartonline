@@ -15,13 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($msg = validate_username($username)) {
         $errors['username'] = $msg;
     }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190) {
+    if (!valid_email($email)) {
         $errors['email'] = t('Enter a valid email address.');
     } elseif (q('SELECT 1 FROM users WHERE email = ?', [$email])->fetch()) {
         $errors['email'] = t('An account with this email already exists. Log in instead.');
     }
-    if (strlen($password) < 8) {
-        $errors['password'] = t('Use at least 8 characters.');
+    if ($msg = password_problem($password)) {
+        $errors['password'] = $msg;
     }
 
     if (!$errors) {

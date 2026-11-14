@@ -8,7 +8,8 @@
             <form method="post" action="<?= url('reset-password') ?>" novalidate>
                 <?= csrf_field() ?>
                 <input type="hidden" name="token" value="<?= e($token) ?>">
-                <?= field('password', t('New password'), ['type' => 'password', 'required' => true, 'attrs' => ' autocomplete="new-password" minlength="8"', 'hint' => t('At least 8 characters.')]) ?>
+                <?= field('password', t('New password'), ['type' => 'password', 'required' => true, 'attrs' => ' autocomplete="new-password" minlength="8" data-password-rules']) ?>
+                <?php partial('password_rules') ?>
                 <button class="btn btn-primary btn-block" type="submit"><?= et('Save new password') ?></button>
             </form>
         <?php else: ?>

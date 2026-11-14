@@ -10,8 +10,8 @@ if (preg_match('/^[a-f0-9]{64}$/', $token)) {
 
 if ($reset && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
-    if (strlen($password) < 8) {
-        $errors['password'] = t('Use at least 8 characters.');
+    if ($msg = password_problem($password)) {
+        $errors['password'] = $msg;
     } else {
         q('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash($password, PASSWORD_DEFAULT), $reset['user_id']]);
         // the link is spent, and every "keep me logged in" device has to log in again

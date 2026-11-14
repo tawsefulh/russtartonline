@@ -443,6 +443,37 @@
         setTimeout(leave, 6500);
     });
 
+    /* ---------- password rules checklist ---------- */
+
+    $$('[data-password-rules]').forEach((input) => {
+        const list = input.closest('.field').nextElementSibling;
+        if (!list || !list.matches('[data-pw-rules]')) return;
+        const tests = {
+            length: (v) => [...v].length >= 8,
+            lower: (v) => /\p{Ll}/u.test(v),
+            upper: (v) => /\p{Lu}/u.test(v),
+        };
+        const update = () => {
+            let all = true;
+            $$('li', list).forEach((li) => {
+                const ok = tests[li.dataset.rule](input.value);
+                li.classList.toggle('is-met', ok);
+                all = all && ok;
+            });
+            if (all) list.classList.remove('is-short');
+            return all;
+        };
+        input.addEventListener('input', update);
+        update();
+        input.form.addEventListener('submit', (e) => {
+            if (!update()) {
+                e.preventDefault();
+                list.classList.add('is-short');
+                input.focus();
+            }
+        });
+    });
+
     /* ---------- live username / email check on sign-up ---------- */
 
     $$('form[data-check-url]').forEach((form) => {
@@ -480,7 +511,7 @@
                 if (value === '') { results[kind] = null; show(null); return; }
 
                 // obvious problems are shown without asking the server
-                if (kind === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                if (kind === 'email' && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(value)) {
                     if (document.activeElement === input) { show(null); results[kind] = null; return; }
                 }
 

@@ -80,7 +80,8 @@ if ($user) {
 
 // New person: make a username from the email
 $base = substr(preg_replace('/[^a-z0-9_]/', '', strtolower(strstr($email, '@', true))), 0, 24);
-$base = strlen($base) >= 3 ? $base : 'student';
+$base = ltrim($base, '0123456789_');
+$base = strlen($base) >= 4 ? $base : 'student';
 $username = $base;
 while (q('SELECT 1 FROM users WHERE username = ?', [$username])->fetch()) {
     $username = $base . random_int(100, 9999);

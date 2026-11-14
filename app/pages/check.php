@@ -30,7 +30,7 @@ if ($field === 'username') {
         ? ['ok' => false, 'message' => $problem]
         : ['ok' => true, 'message' => t('Username is available.')];
 } elseif ($field === 'email') {
-    if (!filter_var($value, FILTER_VALIDATE_EMAIL) || strlen($value) > 190) {
+    if (!valid_email($value)) {
         $answer = ['ok' => false, 'message' => t('Enter a valid email address.')];
     } elseif (q('SELECT 1 FROM users WHERE email = ? AND id <> ?', [$value, $ignore ?? 0])->fetch()) {
         $answer = ['ok' => false, 'message' => t('An account with this email already exists. Log in instead.')];
