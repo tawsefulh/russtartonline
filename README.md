@@ -16,7 +16,7 @@ Built with plain PHP 8 and MySQL/MariaDB, so it runs on XAMPP and on ordinary PH
 1. Start **Apache** and **MySQL** in the XAMPP control panel.
 2. Put this folder in `C:\xampp\htdocs\russtart` (or link it there).
 3. Create an empty database called `russtart` (phpMyAdmin > New). The tables, default cities and categories, and the demo content are created automatically on the first visit.
-4. Check the database settings in `config/config.php`. To change them without touching that file, copy `config/config.local.example.php` to `config/config.local.php`.
+4. The database settings in `config/config.php` match a normal XAMPP install (host `127.0.0.1`, port `3306`, user `root`, no password, database `russtart`). If yours differ (for example MySQL on another port), copy `config/config.local.example.php` to `config/config.local.php` and change only what is different there; that file stays out of git.
 5. Open <http://localhost/russtart/>.
 
 ## Database migrations

@@ -14,7 +14,7 @@ $config = [
 
     'db' => [
         'host' => '127.0.0.1',
-        'port' => 3307,          // XAMPP MySQL was moved to 3307 on this PC
+        'port' => 3306,          // standard MySQL / XAMPP port; change it in config.local.php if yours differs
         'name' => 'russtart',
         'user' => 'root',
         'pass' => '',
