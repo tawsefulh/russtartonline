@@ -553,8 +553,10 @@ button.avatar:has(img) { padding: 0; overflow: hidden; background: var(--mist); 
 .field-box :is(input, textarea):focus { border-color: var(--navy); }
 .field-box input[type="search"]::-webkit-search-cancel-button { display: none; }
 
-.field-box input[readonly] { background: var(--mist); color: var(--ink-soft); border-color: var(--line); cursor: not-allowed; }
-.field-box input[readonly] ~ label { transform: translateY(-11px) scale(.76); }
+/* locked box (username on Profile): cannot be focused, no text cursor, normal mouse pointer */
+.field-box input:disabled { background: var(--mist); color: var(--ink-soft); -webkit-text-fill-color: var(--ink-soft); opacity: 1; border-color: var(--line); cursor: default; user-select: none; }
+.field-box input:disabled:hover { border-color: var(--line); }
+.field-box input:disabled ~ label { transform: translateY(-11px) scale(.76); cursor: default; }
 
 .field-toggle { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); padding: 8px 12px; border: 0; border-radius: 8px; background: none; color: var(--navy); font-weight: 600; font-size: .875rem; cursor: pointer; }
 .field-toggle:hover { background: var(--mist); }

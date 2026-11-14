@@ -40,7 +40,7 @@
                     </div>
                 </dialog>
                 <?= field('name', t('Full name'), ['required' => true, 'value' => old('name', $user['name']), 'attrs' => ' autocomplete="name" maxlength="100" data-clean="name"', 'hint' => t('Letters and spaces only.')]) ?>
-                <?= field('username', t('Username'), ['value' => $user['username'], 'attrs' => ' readonly aria-readonly="true" tabindex="-1"', 'hint' => t('Your username cannot be changed.')]) ?>
+                <?= field('username', t('Username'), ['value' => $user['username'], 'attrs' => ' disabled', 'hint' => t('Your username cannot be changed.')]) ?>
                 <?= field('email', t('Email'), ['required' => true, 'value' => old('email', $user['email']), 'attrs' => ' autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" data-check="email"']) ?>
                 <?= select_field('city', t('City in Russia'), $cities, ['any' => t('Not set'), 'other' => t('Other city'), 'other_label' => t('City name'), 'selected' => old('city', (string) $user['city_id'])]) ?>
                 <?= field('university', t('University'), ['value' => old('university', (string) $user['university']), 'attrs' => ' maxlength="160"', 'hint' => t('Optional.')]) ?>
