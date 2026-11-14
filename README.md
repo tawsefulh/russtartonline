@@ -4,7 +4,7 @@ A website for international students who are new to Russia.
 
 - **Articles**: students write about their experience (visa, dormitory, SIM cards, winter) and newcomers search and read them by city and topic.
 - **Marketplace**: people already in Russia post advertisements; newcomers contact them by phone, WhatsApp or Telegram.
-- **Accounts**: sign up with name, username, email and password; log in with email or username, with "Keep me logged in" and "Forgot password".
+- **Accounts**: sign up with name, username, email and password; log in with email or username, with "Keep me logged in".
 - **Account pages**: My articles, My advertisements, Profile (details and photo) and Security (password, 2-step verification with an authenticator app, signed-in devices, deactivate account).
 
 - **Two languages**: English at `/`, Russian at `/ru/`. Visitors whose browser is set to Russian are sent to `/ru/` on their first visit, and anyone can switch with the selector in the header.
@@ -30,9 +30,13 @@ To change the database later, add a new file such as `0003_add_something.sql`.
 
 ## Password reset emails
 
-"Forgot password?" sends a link that works for one hour. On your PC the emails are not sent: they are saved as text files in `storage/mail`, and the page shows the link so you can test it.
+"Forgot password?" is switched off for now (`'password_reset' => false` in `config/config.php`). When it is on, it sends a link that works for one hour. On your PC the emails are not sent: they are saved as text files in `storage/mail`, and the page shows the link so you can test it.
 
 To send real emails, set `mail` in `config/config.local.php` (see `config.local.example.php`). With Gmail: turn on 2-step verification, create an App Password, and use host `smtp.gmail.com`, port `587`, secure `tls`.
+
+## Updating the live site
+
+Pushing to `main` on GitHub uploads the changed files to InfinityFree automatically (`.github/workflows/deploy.yml`). One-time setup: in the GitHub repository open Settings > Secrets and variables > Actions and add `FTP_SERVER` (ftpupload.net), `FTP_USERNAME` and `FTP_PASSWORD` from InfinityFree > FTP Details. Progress shows in the repository's Actions tab. Files on the server that are not in git (`config/config.local.php`, uploaded photos) are never touched, and database changes run on the first visit after the upload.
 
 ## Put it online
 

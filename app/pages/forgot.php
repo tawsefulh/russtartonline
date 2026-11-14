@@ -1,4 +1,7 @@
 <?php
+if (empty($config['password_reset'])) {
+    not_found();              // switched off in config
+}
 // Forgot password: send a one-hour link for choosing a new password.
 if (current_user()) {
     redirect('');

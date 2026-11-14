@@ -1,4 +1,7 @@
 <?php
+if (empty($config['password_reset'])) {
+    not_found();              // switched off in config
+}
 // Choose a new password from the emailed link.
 $token = $_SERVER['REQUEST_METHOD'] === 'POST' ? post('token') : query('token');
 

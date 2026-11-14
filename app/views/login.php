@@ -18,7 +18,9 @@
                     <span class="check-box" aria-hidden="true"></span>
                     <?= et('Keep me logged in') ?>
                 </label>
-                <a href="<?= url('forgot-password') ?>"><?= et('Forgot password?') ?></a>
+                <?php if (!empty($config['password_reset'])): ?>
+                    <a href="<?= url('forgot-password') ?>"><?= et('Forgot password?') ?></a>
+                <?php endif ?>
             </div>
             <button class="btn btn-primary btn-block" type="submit"><?= et('Log in') ?></button>
         </form>

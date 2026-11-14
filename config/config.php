@@ -20,6 +20,10 @@ $config = [
         'pass' => '',
     ],
 
+    // "Forgot password?" on the login page. Off for now; to turn it on, set true here or in
+    // config.local.php, and fill in 'mail' below so the reset emails are really sent.
+    'password_reset' => false,
+
     // Email (password reset links).
     //   'log'  saves emails to storage/mail instead of sending them (for testing on your PC)
     //   'smtp' sends them, e.g. Gmail: host smtp.gmail.com, port 587, secure tls,

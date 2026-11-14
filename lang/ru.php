@@ -207,6 +207,7 @@ return [
     'The email was saved to storage/mail instead. To test, open the link:' => 'Письмо сохранено в папку storage/mail. Для проверки откройте ссылку:',
     'Back to log in' => 'Вернуться ко входу',
     'Too many attempts. Wait 15 minutes and try again, or reset your password.' => 'Слишком много попыток. Подождите 15 минут и попробуйте снова или восстановите пароль.',
+    'Too many attempts. Wait 15 minutes and try again.' => 'Слишком много попыток. Подождите 15 минут и попробуйте снова.',
     'Too many requests. Wait a few minutes and try again.' => 'Слишком много попыток. Подождите несколько минут и попробуйте снова.',
     'Reset your RusStart password' => 'Восстановление пароля RusStart',
     "Hello %s,\n\nSomeone asked to reset the password for your RusStart account. Open this link to choose a new password:\n\n%s\n\nThe link works for one hour and only once. If you did not ask for this, ignore this email and your password stays the same.\n\nRusStart" => "Здравствуйте, %s!\n\nКто-то запросил восстановление пароля для вашего аккаунта RusStart. Откройте ссылку, чтобы задать новый пароль:\n\n%s\n\nСсылка действует один час и только один раз. Если вы этого не запрашивали, просто проигнорируйте письмо — пароль останется прежним.\n\nRusStart",

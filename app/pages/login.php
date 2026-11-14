@@ -27,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($blocked) {
-        $errors['login'] = t('Too many attempts. Wait 15 minutes and try again, or reset your password.');
+        $errors['login'] = !empty($config['password_reset'])
+            ? t('Too many attempts. Wait 15 minutes and try again, or reset your password.')
+            : t('Too many attempts. Wait 15 minutes and try again.');
     } else {
         q('INSERT INTO login_failures (ip, login) VALUES (?, ?)', [$ip, substr($login, 0, 190)]);
         q('DELETE FROM login_failures WHERE created_at < NOW() - INTERVAL 1 DAY');

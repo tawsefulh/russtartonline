@@ -1,8 +1,4 @@
-# Uploaded files are images only: never run scripts from this folder
-Options -Indexes -ExecCGI
-<FilesMatch "\.(php\d?|phtml|phar|pl|py|cgi|sh)$">
-    Require all denied
-</FilesMatch>
-<IfModule mod_php.c>
-    php_flag engine off
-</IfModule>
+# Uploaded pictures live here.
+# Script files in this folder are refused by the main .htaccess (one level up).
+# Keep this file free of directives: some hosts (InfinityFree) reject the whole
+# folder with a server error when it contains Options or php_flag lines.

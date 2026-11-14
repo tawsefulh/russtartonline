@@ -7,6 +7,9 @@ Options -Indexes
     RewriteRule ^(app|config|database|lang|storage)(/|$) - [F,L]
     RewriteRule (^|/)\.(git|htaccess|gitignore) - [F,L]
 
+    # Uploaded files are pictures only: never run or serve a script from the uploads folder
+    RewriteRule ^uploads/.*\.(php[0-9]?|phtml|phar|pl|py|cgi|sh|html?|svg)$ - [F,L,NC]
+
     # Real files (css, js, images, uploads) are served as they are
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^ - [L]
