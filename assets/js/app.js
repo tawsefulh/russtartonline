@@ -436,13 +436,6 @@
         form.addEventListener('submit', (e) => { if (!window.confirm(form.dataset.confirm)) e.preventDefault(); });
     });
 
-    // toasts slide away on their own
-    $$('[data-toast]').forEach((toast) => {
-        const leave = () => { toast.classList.add('leaving'); setTimeout(() => toast.remove(), 600); };
-        $('[data-toast-close]', toast).addEventListener('click', leave);
-        setTimeout(leave, 6500);
-    });
-
     /* ---------- password rules checklist ---------- */
 
     $$('[data-password-rules]').forEach((input) => {

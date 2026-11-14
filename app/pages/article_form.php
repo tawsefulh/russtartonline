@@ -30,13 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             q('UPDATE articles SET title = ?, body = ?, excerpt = ?, city_id = ?, category_id = ?, cover = ?, updated_at = NOW() WHERE id = ?',
                 [$title, $body, excerpt($body), $cityId, $categoryId, $cover ?: $article['cover'], $article['id']]);
-            flash('success', t('Changes saved.'));
             redirect('articles/' . $article['slug']);
         }
         $slug = unique_slug('articles', $title);
         q('INSERT INTO articles (user_id, city_id, category_id, title, slug, excerpt, body, cover) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
             [$user['id'], $cityId, $categoryId, $title, $slug, excerpt($body), $body, $cover]);
-        flash('success', t('Article published.'));
         redirect('articles/' . $slug);
     }
 }

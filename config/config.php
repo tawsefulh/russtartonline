@@ -1,7 +1,7 @@
 <?php
 /**
  * Default settings (local XAMPP).
- * To override anything (production database, Google keys), copy
+ * To override anything (production database, email), copy
  * config.local.example.php to config.local.php and edit that file.
  * config.local.php is not committed to git.
  */
@@ -18,13 +18,6 @@ $config = [
         'name' => 'russtart',
         'user' => 'root',
         'pass' => '',
-    ],
-
-    // Google sign-in. Leave empty to hide the Google button.
-    // Create keys at https://console.cloud.google.com/apis/credentials
-    'google' => [
-        'client_id'     => '',
-        'client_secret' => '',
     ],
 
     // Email (password reset links).

@@ -8,5 +8,4 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$ad || (int) $ad['user_id'] !== (i
 
 q('DELETE FROM ads WHERE id = ?', [$ad['id']]);
 delete_upload($ad['image']);
-flash('success', t('Advertisement deleted.'));
 redirect('me');

@@ -5,8 +5,6 @@
         <h1><?= et('Create account') ?></h1>
         <p class="auth-lead"><?= et('Join the students who share what they learned about life in Russia, and help the next one arrive ready.') ?></p>
 
-        <?php partial('google_button') ?>
-
         <form method="post" action="<?= url('register') ?>" novalidate data-check-url="<?= url('check') ?>">
             <?= csrf_field() ?>
             <?= field('name', t('Full name'), ['required' => true, 'attrs' => ' autocomplete="name" maxlength="100" data-clean="name"', 'hint' => t('Letters and spaces only.')]) ?>

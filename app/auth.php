@@ -44,7 +44,6 @@ function require_login(): array
     $u = current_user();
     if (!$u) {
         $_SESSION['after_login'] = $_SERVER['REQUEST_URI'];
-        flash('info', t('Log in to continue.'));
         redirect('login');
     }
     return $u;
@@ -60,12 +59,6 @@ function redirect_after_login(): void
         exit;
     }
     redirect('');
-}
-
-function google_enabled(): bool
-{
-    global $config;
-    return $config['google']['client_id'] !== '' && $config['google']['client_secret'] !== '';
 }
 
 function validate_username(string $username, ?int $ignoreId = null): ?string

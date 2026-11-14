@@ -31,7 +31,6 @@ return [
     'Write an article' => 'Написать статью',
     'All articles' => 'Все статьи',
     'All advertisements' => 'Все объявления',
-    'Dismiss' => 'Закрыть',
     'Cancel' => 'Отмена',
     'Edit' => 'Изменить',
     'Search' => 'Найти',
@@ -105,9 +104,6 @@ return [
     'Add a cover photo' => 'Добавить обложку',
     'Optional. JPG, PNG or WebP, up to 3 MB.' => 'Необязательно. JPG, PNG или WebP, до 3 МБ.',
     'Publish article' => 'Опубликовать статью',
-    'Article published.' => 'Статья опубликована.',
-    'Article deleted.' => 'Статья удалена.',
-    'Changes saved.' => 'Изменения сохранены.',
     'Write a title between 8 and 160 characters.' => 'Заголовок должен быть от 8 до 160 символов.',
     'Write at least 200 characters so the article is useful to a newcomer.' => 'Напишите не меньше 200 символов, чтобы статья была полезна новичку.',
 
@@ -149,8 +145,6 @@ return [
     'WhatsApp number' => 'Номер WhatsApp',
     'Telegram username or number' => 'Имя или номер в Telegram',
     'Post advertisement' => 'Разместить объявление',
-    'Advertisement posted.' => 'Объявление размещено.',
-    'Advertisement deleted.' => 'Объявление удалено.',
     'Write a title between 5 and 140 characters.' => 'Заголовок должен быть от 5 до 140 символов.',
     'Describe what you are offering in at least 20 characters.' => 'Опишите предложение, не меньше 20 символов.',
     'Enter the price in roubles as a number, or leave it empty.' => 'Укажите цену в рублях числом или оставьте поле пустым.',
@@ -161,14 +155,10 @@ return [
     'Add a phone, WhatsApp or Telegram number so buyers can contact you.' => 'Добавьте телефон, WhatsApp или Telegram, чтобы покупатели могли с вами связаться.',
 
     // ---------- accounts ----------
-    'Log in to continue.' => 'Войдите, чтобы продолжить.',
-    'Logged out.' => 'Вы вышли из аккаунта.',
     'New here?' => 'Впервые здесь?',
     'Already a member?' => 'Уже есть аккаунт?',
     'Every guide here was written by a student who arrived the same way you will.' => 'Каждую статью здесь написал студент, который приехал так же, как приедете вы.',
     'Good to see you again. Someone is reading what you wrote right now.' => 'Рады видеть вас снова. Прямо сейчас кто-то читает вашу статью.',
-    'Continue with Google' => 'Продолжить с Google',
-    'or use your email' => 'или по электронной почте',
     'Full name' => 'Имя и фамилия',
     'Username' => 'Имя пользователя',
     'Email' => 'Электронная почта',
@@ -186,9 +176,6 @@ return [
     'You can use this email.' => 'Эту почту можно использовать.',
     'Checking…' => 'Проверяем…',
     'The email, username or password is not correct.' => 'Неверная почта, имя пользователя или пароль.',
-    'This account was created with Google. Use "Continue with Google" to log in.' => 'Этот аккаунт создан через Google. Нажмите «Продолжить с Google», чтобы войти.',
-    'Google sign-in is not set up yet. Use email and password.' => 'Вход через Google пока не настроен. Используйте почту и пароль.',
-    'Google sign-in did not finish. Try again.' => 'Вход через Google не завершён. Попробуйте ещё раз.',
 
     // ---------- forms and uploads ----------
     'Choose a city.' => 'Выберите город.',
@@ -210,8 +197,6 @@ return [
     // ---------- login extras, password reset ----------
     'Welcome back. Your articles, ads and city are right where you left them.' => 'С возвращением. Ваши статьи, объявления и город на месте.',
     'Join the students who share what they learned about life in Russia, and help the next one arrive ready.' => 'Присоединяйтесь к студентам, которые делятся опытом жизни в России, и помогите следующему приехать подготовленным.',
-    'Welcome back, %s. Good to see you again.' => 'С возвращением, %s! Рады видеть вас снова.',
-    'Welcome to RusStart, %s! Your account is ready. Start by reading about your city or sharing your own story.' => 'Добро пожаловать в RusStart, %s! Аккаунт готов. Почитайте о своём городе или расскажите свою историю.',
     'Keep me logged in' => 'Запомнить меня',
     'Forgot password?' => 'Забыли пароль?',
     'Forgot password' => 'Восстановление пароля',
@@ -232,7 +217,6 @@ return [
     'Hello %s. Pick a password you have not used here before.' => 'Здравствуйте, %s. Выберите пароль, которого вы здесь раньше не использовали.',
     'New password' => 'Новый пароль',
     'Save new password' => 'Сохранить пароль',
-    'Password changed. Welcome back, %s.' => 'Пароль изменён. С возвращением, %s!',
     'This link no longer works' => 'Ссылка больше не действует',
     'Reset links work for one hour and only once. Ask for a new one and use the latest email.' => 'Ссылка для восстановления действует один час и только один раз. Запросите новую и откройте последнее письмо.',
     'Send a new link' => 'Отправить новую ссылку',

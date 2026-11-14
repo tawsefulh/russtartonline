@@ -85,17 +85,6 @@ $jsText = [
     </div>
 </header>
 
-<?php if ($flashes = flashes()): ?>
-    <div class="toasts" role="status" aria-live="polite">
-        <?php foreach ($flashes as $f): ?>
-            <div class="toast toast-<?= e($f['type']) ?>" data-toast>
-                <span><?= e($f['message']) ?></span>
-                <button type="button" aria-label="<?= et('Dismiss') ?>" data-toast-close>&times;</button>
-            </div>
-        <?php endforeach ?>
-    </div>
-<?php endif ?>
-
 <main id="main">
 <?= $content ?>
 </main>

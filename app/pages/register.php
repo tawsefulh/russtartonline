@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         q('INSERT INTO users (name, username, email, password_hash) VALUES (?, ?, ?, ?)',
             [$name, $username, $email, password_hash($password, PASSWORD_DEFAULT)]);
         login_user((int) db()->lastInsertId());
-        flash('success', t('Welcome to RusStart, %s! Your account is ready. Start by reading about your city or sharing your own story.', explode(' ', $name)[0]));
         redirect_after_login();
     }
 }

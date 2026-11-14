@@ -12,7 +12,7 @@ function url(string $path = ''): string
     return BASE_URL . (LANG === 'ru' ? '/ru' : '') . '/' . ltrim($path, '/');
 }
 
-/** Link without a language prefix (files, Google callback). */
+/** Link without a language prefix (files, language switch). */
 function base_url(string $path = ''): string
 {
     return BASE_URL . '/' . ltrim($path, '/');
@@ -87,18 +87,6 @@ function csrf_check(): void
         http_response_code(403);   // 419 is not a standard code and Apache turns it into 500
         exit(t('This form expired. Go back, refresh the page and try again.'));
     }
-}
-
-function flash(string $type, string $message): void
-{
-    $_SESSION['flash'][] = ['type' => $type, 'message' => $message];
-}
-
-function flashes(): array
-{
-    $f = $_SESSION['flash'] ?? [];
-    unset($_SESSION['flash']);
-    return $f;
 }
 
 /** Value typed into a form before it failed validation. */

@@ -5,8 +5,6 @@
         <h1><?= et('Log in') ?></h1>
         <p class="auth-lead"><?= et('Welcome back. Your articles, ads and city are right where you left them.') ?></p>
 
-        <?php partial('google_button') ?>
-
         <form method="post" action="<?= url('login') ?>" novalidate>
             <?= csrf_field() ?>
             <?= field('login', t('Email or username'), ['required' => true, 'attrs' => ' autocomplete="username" autocapitalize="none" spellcheck="false" data-clean="email"']) ?>

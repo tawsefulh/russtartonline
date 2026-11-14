@@ -17,7 +17,7 @@ $path = ROUTE_PATH;
 
 // A visitor who prefers Russian (chosen earlier, or detected) and opened an English address goes to /ru
 if (URL_LANG === 'en' && $_SERVER['REQUEST_METHOD'] === 'GET' && preferred_lang() === 'ru'
-    && !preg_match('#^/(language|auth)/#', $path)) {
+    && !preg_match('#^/language/#', $path)) {
     header('Location: ' . lang_url('ru'), true, 302);
     exit;
 }
@@ -33,8 +33,6 @@ $routes = [
     '#^/forgot-password$#'            => 'forgot',
     '#^/reset-password$#'             => 'reset',
     '#^/logout$#'                     => 'logout',
-    '#^/auth/google$#'                => 'google',
-    '#^/auth/google/callback$#'       => 'google_callback',
     '#^/me$#'                         => 'me',
     '#^/articles$#'                   => 'articles',
     '#^/articles/new$#'               => 'article_form',

@@ -60,14 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             q('UPDATE ads SET title = ?, description = ?, price = ?, address = ?, phone = ?, whatsapp = ?, telegram = ?,
                               city_id = ?, category_id = ?, image = ?, updated_at = NOW() WHERE id = ?',
                 [$title, $description, $price, $address, $phone, $whatsapp, $telegram, $cityId, $categoryId, $image ?: $ad['image'], $ad['id']]);
-            flash('success', t('Changes saved.'));
             redirect('market/' . $ad['slug']);
         }
         $slug = unique_slug('ads', $title);
         q('INSERT INTO ads (user_id, city_id, category_id, title, slug, description, price, address, phone, whatsapp, telegram, image)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [$user['id'], $cityId, $categoryId, $title, $slug, $description, $price, $address, $phone, $whatsapp, $telegram, $image]);
-        flash('success', t('Advertisement posted.'));
         redirect('market/' . $slug);
     }
 }

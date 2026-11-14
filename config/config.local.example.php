@@ -13,15 +13,6 @@ return [
     //     'pass' => 'your-hosting-password',
     // ],
 
-    // Google sign-in keys.
-    // Authorised redirect URI to register in Google Cloud:
-    //   http://localhost/russtart/auth/google/callback   (local)
-    //   https://your-domain/auth/google/callback         (online)
-    // 'google' => [
-    //     'client_id'     => 'xxxxxxxx.apps.googleusercontent.com',
-    //     'client_secret' => 'xxxxxxxx',
-    // ],
-
     // Send real emails through Gmail (create an App Password in your Google account first)
     // 'mail' => [
     //     'driver' => 'smtp',

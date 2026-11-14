@@ -18,7 +18,6 @@ if ($reset && $_SERVER['REQUEST_METHOD'] === 'POST') {
         q('DELETE FROM password_resets WHERE user_id = ?', [$reset['user_id']]);
         q('DELETE FROM remember_tokens WHERE user_id = ?', [$reset['user_id']]);
         login_user((int) $reset['user_id']);
-        flash('success', t('Password changed. Welcome back, %s.', explode(' ', $reset['name'])[0]));
         redirect('');
     }
 }
