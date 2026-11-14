@@ -17,8 +17,13 @@
                     'selected' => old('category', (string) ($article['category_id'] ?? ''))]) ?>
             </div>
 
-            <?= field('body', t('Your experience'), ['type' => 'textarea', 'rows' => 16, 'required' => true, 'value' => $v('body'),
-                'hint' => t('Leave an empty line between paragraphs. Start a line with ## to make a subheading.')]) ?>
+            <div class="editor" data-editor data-preview-url="<?= url('preview') ?>">
+                <?php partial('editor_toolbar') ?>
+                <?= field('body', t('Your experience'), ['type' => 'textarea', 'rows' => 16, 'required' => true, 'value' => $v('body'),
+                    'hint' => t('Format with the buttons above. Leave an empty line between paragraphs.')]) ?>
+                <div class="editor-preview prose" data-editor-preview hidden></div>
+                <?php partial('format_tips') ?>
+            </div>
 
             <div class="field<?= isset($errors['cover']) ? ' has-error' : '' ?>">
                 <label class="upload" data-upload>

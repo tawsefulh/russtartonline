@@ -12,6 +12,14 @@ $jsText = [
     'hidePass'   => t('Hide password'),
     'notChosen'  => t('not chosen'),
     'checking'   => t('Checking…'),
+    'linkPrompt' => t('Paste the link address (it starts with https://)'),
+    'linkText'   => t('link text'),
+    'boldText'   => t('bold text'),
+    'italicText' => t('italic text'),
+    'underText'  => t('underlined text'),
+    'headText'   => t('Heading'),
+    'nothing2'   => t('Nothing to preview yet. Write something first.'),
+    'previewErr' => t('The preview could not load. Check your connection and try again.'),
 ];
 ?>
 <!doctype html>

@@ -30,6 +30,7 @@ $routes = [
     '#^/login$#'                      => 'login',
     '#^/register$#'                   => 'register',
     '#^/check$#'                      => 'check',
+    '#^/preview$#'                    => 'preview',
     '#^/forgot-password$#'            => 'forgot',
     '#^/reset-password$#'             => 'reset',
     '#^/logout$#'                     => 'logout',

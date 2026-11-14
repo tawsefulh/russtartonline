@@ -19,8 +19,13 @@ $price = old('price', isset($ad['price']) ? rtrim(rtrim((string) $ad['price'], '
                         'selected' => old('category', (string) ($ad['category_id'] ?? ''))]) ?>
                     <?= field('price', t('Price in roubles'), ['value' => $price, 'attrs' => ' inputmode="decimal"', 'hint' => t('Leave empty for "Price on request".')]) ?>
                 </div>
-                <?= field('description', t('Description'), ['type' => 'textarea', 'rows' => 7, 'required' => true, 'value' => $v('description'),
-                    'hint' => t('Condition, age, what is included, when you are available.')]) ?>
+                <div class="editor" data-editor data-preview-url="<?= url('preview') ?>">
+                    <?php partial('editor_toolbar') ?>
+                    <?= field('description', t('Description'), ['type' => 'textarea', 'rows' => 8, 'required' => true, 'value' => $v('description'),
+                        'hint' => t('Condition, age, what is included, when you are available.')]) ?>
+                    <div class="editor-preview prose prose-sm" data-editor-preview hidden></div>
+                    <?php partial('format_tips') ?>
+                </div>
 
                 <div class="field<?= isset($errors['image']) ? ' has-error' : '' ?>">
                     <label class="upload" data-upload>

@@ -148,7 +148,7 @@ function unique_slug(string $table, string $text): string
 
 function excerpt(string $text, int $length = 180): string
 {
-    $text = trim(preg_replace('/\s+/u', ' ', preg_replace('/^##.*$/m', '', $text)));
+    $text = trim(preg_replace('/\s+/u', ' ', plain_text($text)));
     if (mb_strlen($text) <= $length) {
         return $text;
     }
@@ -157,22 +157,116 @@ function excerpt(string $text, int $length = 180): string
     return rtrim(mb_substr($cut, 0, $space ?: $length), " ,.;:") . '…';
 }
 
-/** Article text: blank line = new paragraph, a line starting with "## " = subheading. */
+/* ---------- simple text formatting for articles and advertisements ----------
+   What people type                 What readers see
+   **bold**                         bold
+   *italic*                         italic
+   __underline__                    underlined
+   ## Heading / ### Small heading   headings
+   - item                           bulleted list
+   1. item                          numbered list
+   > text                           quote
+   [text](https://...)              link (opens in a new tab)
+   Everything is escaped first, so only these signs become formatting. */
+
+/** Bold, italic, underline and links inside one line (the text is escaped first). */
+function format_inline(string $line): string
+{
+    $s = e($line);
+    $s = preg_replace('/\*\*(?=\S)(.+?)(?<=\S)\*\*/u', '<strong>$1</strong>', $s);
+    $s = preg_replace('/__(?=\S)(.+?)(?<=\S)__/u', '<u>$1</u>', $s);
+    $s = preg_replace('/(?<![*\w])\*(?=[^\s*])(.+?)(?<=[^\s*])\*(?![*\w])/u', '<em>$1</em>', $s);
+    // links last, so a link can hold formatted text; only http(s) addresses are allowed
+    return preg_replace_callback('/\[([^\]\n]{1,200})\]\((https?:\/\/[^\s()<>"]{1,500})\)/u',
+        fn($m) => '<a href="' . $m[2] . '" target="_blank" rel="nofollow noopener ugc">' . $m[1] . '</a>', $s);
+}
+
+/** Article / advertisement text to HTML: paragraphs, headings, lists, quotes and inline formatting. */
 function format_body(string $text): string
 {
     $html = '';
-    foreach (preg_split('/\R{2,}/u', trim($text)) as $block) {
-        $block = trim($block);
-        if ($block === '') {
+    $para = [];
+    $list = null;            // ['ul' | 'ol', [items]]
+    $quote = [];
+
+    $flushPara = function () use (&$html, &$para) {
+        if ($para) {
+            $html .= '<p>' . implode('<br>', array_map('format_inline', $para)) . '</p>';
+            $para = [];
+        }
+    };
+    $flushList = function () use (&$html, &$list) {
+        if ($list) {
+            $html .= '<' . $list[0] . '>' . implode('', array_map(fn($i) => '<li>' . format_inline($i) . '</li>', $list[1])) . '</' . $list[0] . '>';
+            $list = null;
+        }
+    };
+    $flushQuote = function () use (&$html, &$quote) {
+        if ($quote) {
+            $html .= '<blockquote><p>' . implode('<br>', array_map('format_inline', $quote)) . '</p></blockquote>';
+            $quote = [];
+        }
+    };
+    $flushAll = function () use ($flushPara, $flushList, $flushQuote) {
+        $flushPara();
+        $flushList();
+        $flushQuote();
+    };
+
+    foreach (preg_split('/\R/u', trim($text)) as $raw) {
+        $line = rtrim($raw);
+        if (trim($line) === '') {                                   // empty line ends a block
+            $flushAll();
             continue;
         }
-        if (str_starts_with($block, '## ')) {
-            $html .= '<h2>' . e(substr($block, 3)) . '</h2>';
-        } else {
-            $html .= '<p>' . nl2br(e($block)) . '</p>';
+        if (preg_match('/^(#{2,3})\s+(.+)$/u', $line, $m)) {          // ## heading / ### small heading
+            $flushAll();
+            $tag = strlen($m[1]) === 2 ? 'h2' : 'h3';
+            $html .= "<$tag>" . format_inline($m[2]) . "</$tag>";
+            continue;
         }
+        if (preg_match('/^\s*[-•]\s+(.+)$/u', $line, $m)) {           // - bulleted item
+            $flushPara();
+            $flushQuote();
+            if ($list && $list[0] !== 'ul') {
+                $flushList();
+            }
+            $list = $list ?: ['ul', []];
+            $list[1][] = $m[1];
+            continue;
+        }
+        if (preg_match('/^\s*\d{1,3}[.)]\s+(.+)$/u', $line, $m)) {    // 1. numbered item
+            $flushPara();
+            $flushQuote();
+            if ($list && $list[0] !== 'ol') {
+                $flushList();
+            }
+            $list = $list ?: ['ol', []];
+            $list[1][] = $m[1];
+            continue;
+        }
+        if (preg_match('/^>\s?(.*)$/u', $line, $m)) {                  // > quote
+            $flushPara();
+            $flushList();
+            $quote[] = $m[1];
+            continue;
+        }
+        $flushList();
+        $flushQuote();
+        $para[] = $line;
     }
+    $flushAll();
     return $html;
+}
+
+/** The text without formatting signs, for short previews in lists. */
+function plain_text(string $text): string
+{
+    $text = preg_replace('/^#{2,3}\s+.*$/mu', '', $text);                         // headings are not part of the preview
+    $text = preg_replace('/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/u', '$1', $text);   // links keep their text
+    $text = preg_replace('/^\s*(?:[-•]|\d{1,3}[.)]|>)\s?/mu', '', $text);            // list and quote signs
+    $text = str_replace(['**', '__'], '', $text);                                    // bold and underline first,
+    return preg_replace('/(?<![*\w])\*(?=\S)(.+?)(?<=\S)\*(?![*\w])/u', '$1', $text); // then italic
 }
 
 function reading_time(string $text): int

@@ -566,6 +566,92 @@
         });
     });
 
+    // text formatting toolbar, keyboard shortcuts and preview on the article and advertisement forms
+    $$('[data-editor]').forEach((editor) => {
+        const ta = $('textarea', editor);
+        const box = ta.closest('.field');
+        const preview = $('[data-editor-preview]', editor);
+        if (!ta) return;
+
+        const changed = () => { ta.focus(); ta.dispatchEvent(new Event('input', { bubbles: true })); };
+
+        // put signs around the selection, e.g. **bold**; click again to take them off
+        const wrap = (before, after, placeholder) => {
+            const { selectionStart: s, selectionEnd: e, value: v } = ta;
+            if (v.slice(s - before.length, s) === before && v.slice(e, e + after.length) === after) {
+                ta.setRangeText(v.slice(s, e), s - before.length, e + after.length, 'select');
+                return changed();
+            }
+            const text = v.slice(s, e) || placeholder;
+            ta.setRangeText(before + text + after, s, e, 'end');
+            ta.setSelectionRange(s + before.length, s + before.length + text.length);
+            changed();
+        };
+
+        // put a sign at the start of each selected line, e.g. "- " for a list; again to take it off
+        const lines = (makePrefix, test) => {
+            const { selectionStart: s, selectionEnd: e, value: v } = ta;
+            const start = v.lastIndexOf('\n', s - 1) + 1;
+            let end = v.indexOf('\n', e > s && v[e - 1] === '\n' ? e - 1 : e);
+            if (end === -1) end = v.length;
+            const rows = v.slice(start, end).split('\n');
+            const remove = rows.every((r) => r.trim() === '' || test.test(r));
+            const out = rows.map((r, i) => (r.trim() === '' && rows.length > 1 ? r : remove ? r.replace(test, '') : makePrefix(i) + r.replace(test, ''))).join('\n');
+            ta.setRangeText(out, start, end, 'select');
+            if (rows.length === 1 && !remove && rows[0].trim() === '') ta.setSelectionRange(start + out.length, start + out.length);
+            changed();
+        };
+
+        const actions = {
+            bold: () => wrap('**', '**', TEXT.boldText || 'bold text'),
+            italic: () => wrap('*', '*', TEXT.italicText || 'italic text'),
+            underline: () => wrap('__', '__', TEXT.underText || 'underlined text'),
+            heading: () => lines(() => '## ', /^#{2,3}\s+/),
+            ul: () => lines(() => '- ', /^\s*[-•]\s+/),
+            ol: () => lines((i) => `${i + 1}. `, /^\s*\d{1,3}[.)]\s+/),
+            quote: () => lines(() => '> ', /^>\s?/),
+            link: () => {
+                const url = window.prompt(TEXT.linkPrompt || 'Link address', 'https://');
+                if (!url || !/^https?:\/\/\S+$/i.test(url.trim())) return ta.focus();
+                wrap('[', `](${url.trim()})`, TEXT.linkText || 'link text');
+            },
+        };
+
+        $$('[data-format]', editor).forEach((btn) => {
+            btn.addEventListener('mousedown', (e) => e.preventDefault());       // keep the selection in the text box
+            btn.addEventListener('click', () => actions[btn.dataset.format]());
+        });
+        ta.addEventListener('keydown', (e) => {
+            if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+            const key = { b: 'bold', i: 'italic', u: 'underline' }[e.key.toLowerCase()];
+            if (key) { e.preventDefault(); actions[key](); }
+        });
+
+        // Write / Preview
+        const tabs = $$('[data-editor-mode]', editor);
+        const show = (mode) => {
+            tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.editorMode === mode)));
+            const previewing = mode === 'preview';
+            $('.editor-tools', editor).classList.toggle('is-off', previewing);
+            $$('[data-format]', editor).forEach((b) => { b.disabled = previewing; });
+            if (!previewing) { box.hidden = false; preview.hidden = true; ta.focus(); return; }
+            preview.style.minHeight = `${$('.field-box', box).offsetHeight}px`;
+            box.hidden = true;
+            preview.hidden = false;
+            if (ta.value.trim() === '') { preview.innerHTML = `<p class="editor-empty">${TEXT.nothing2 || ''}</p>`; return; }
+            const body = new FormData();
+            body.append('_csrf', ta.form.querySelector('[name="_csrf"]').value);
+            body.append('text', ta.value);
+            preview.classList.add('is-loading');
+            fetch(editor.dataset.previewUrl, { method: 'POST', body, credentials: 'same-origin' })
+                .then((r) => (r.ok ? r.text() : Promise.reject()))
+                .then((html) => { preview.innerHTML = html; })
+                .catch(() => { preview.innerHTML = `<p class="editor-empty">${TEXT.previewErr || ''}</p>`; })
+                .finally(() => preview.classList.remove('is-loading'));
+        };
+        tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.editorMode)));
+    });
+
     // confirm before deleting
     $$('form[data-confirm]').forEach((form) => {
         form.addEventListener('submit', (e) => { if (!window.confirm(form.dataset.confirm)) e.preventDefault(); });
