@@ -4,6 +4,9 @@
     <div class="auth-card">
         <h1><?= et('Log in') ?></h1>
         <p class="auth-lead"><?= et('Welcome back. Your articles, ads and city are right where you left them.') ?></p>
+        <?php if (!empty($passwordReset)): ?>
+            <p class="notice" role="status"><?= et('Password changed. Log in with your new password.') ?></p>
+        <?php endif ?>
 
         <form method="post" action="<?= url('login') ?>" novalidate>
             <?= csrf_field() ?>

@@ -5,6 +5,7 @@ A website for international students who are new to Russia.
 - **Articles**: students write about their experience (visa, dormitory, SIM cards, winter) and newcomers search and read them by city and topic.
 - **Marketplace**: people already in Russia post advertisements; newcomers contact them by phone, WhatsApp or Telegram.
 - **Accounts**: sign up with name, username, email and password; log in with email or username, with "Keep me logged in" and "Forgot password".
+- **Account pages**: My articles, My advertisements, Profile (details and photo) and Security (password, 2-step verification with an authenticator app, signed-in devices, deactivate account).
 
 - **Two languages**: English at `/`, Russian at `/ru/`. Visitors whose browser is set to Russian are sent to `/ru/` on their first visit, and anyone can switch with the selector in the header.
 
@@ -29,7 +30,7 @@ To send real emails, set `mail` in `config/config.local.php` (see `config.local.
 1. Upload everything except `.git` into the host's `htdocs` folder.
 2. Import `database/schema.sql` into the host's database.
 3. Create `config/config.local.php` on the host with its database details, the mail settings and `'debug' => false`.
-4. If the database already exists from an older version, import `database/schema.sql` again: it only adds the missing tables.
+4. If the database already exists from an older version, import `database/schema.sql` again (it only adds missing tables), then `database/upgrade-2026-11-account.sql` once.
 
 ## Folders
 

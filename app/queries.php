@@ -6,11 +6,11 @@
 
 function post_select(string $table): string
 {
-    return "SELECT p.*, u.name AS author, u.username, u.university,
+    return "SELECT p.*, u.name AS author, u.username, u.university, u.avatar AS author_avatar,
                    " . name_sql('c') . " AS city, c.slug AS city_slug,
                    " . name_sql('k') . " AS category, k.slug AS category_slug
             FROM `$table` p
-            JOIN users u ON u.id = p.user_id
+            JOIN users u ON u.id = p.user_id AND u.deactivated_at IS NULL
             JOIN cities c ON c.id = p.city_id
             JOIN categories k ON k.id = p.category_id";
 }
@@ -54,6 +54,7 @@ function count_posts(string $table, array $f = []): int
 {
     [$where, $params] = post_where($table, $f);
     $sql = "SELECT COUNT(*) FROM `$table` p
+            JOIN users u ON u.id = p.user_id AND u.deactivated_at IS NULL
             JOIN cities c ON c.id = p.city_id
             JOIN categories k ON k.id = p.category_id" . $where;
     return (int) q($sql, $params)->fetchColumn();

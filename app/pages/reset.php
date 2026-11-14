@@ -4,7 +4,7 @@ $token = $_SERVER['REQUEST_METHOD'] === 'POST' ? post('token') : query('token');
 
 $reset = null;
 if (preg_match('/^[a-f0-9]{64}$/', $token)) {
-    $reset = q('SELECT r.id, r.user_id, u.name FROM password_resets r JOIN users u ON u.id = r.user_id
+    $reset = q('SELECT r.id, r.user_id, u.name, u.totp_secret FROM password_resets r JOIN users u ON u.id = r.user_id
                 WHERE r.token_hash = ? AND r.expires_at > NOW()', [hash('sha256', $token)])->fetch() ?: null;
 }
 
@@ -17,8 +17,11 @@ if ($reset && $_SERVER['REQUEST_METHOD'] === 'POST') {
         // the link is spent, and every "keep me logged in" device has to log in again
         q('DELETE FROM password_resets WHERE user_id = ?', [$reset['user_id']]);
         q('DELETE FROM remember_tokens WHERE user_id = ?', [$reset['user_id']]);
-        login_user((int) $reset['user_id']);
-        redirect('');
+        q('DELETE FROM user_sessions WHERE user_id = ?', [$reset['user_id']]);
+        if ($reset['totp_secret']) {
+            redirect('login?reset=1');          // the 2-step code is still needed
+        }
+        complete_login((int) $reset['user_id'], false);
     }
 }
 

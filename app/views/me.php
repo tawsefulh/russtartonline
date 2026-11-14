@@ -1,49 +1,34 @@
-<section class="page-head">
-    <div class="wrap page-head-row">
-        <div>
-            <h1><?= et('My posts') ?></h1>
-            <p class="page-lead"><?= e(implode(', ', array_filter([$user['name'], '@' . $user['username'], $user['city_name']]))) ?></p>
-        </div>
-        <p class="page-jump">
-            <a class="btn btn-ghost" href="<?= url('market/new') ?>"><?= et('Post an ad') ?></a>
-            <a class="btn btn-primary" href="<?= url('articles/new') ?>"><?= et('Write an article') ?></a>
-        </p>
-    </div>
-</section>
+<?php partial('account_head', ['tab' => 'articles']) ?>
 
-<section class="section section-flush">
-    <div class="wrap mine">
-        <div>
-            <h2><?= et('Articles') ?></h2>
-            <?php if ($articles): ?>
-                <ul class="mine-list">
-                    <?php foreach ($articles as $a): ?>
-                        <li>
+<section class="section account-body">
+    <div class="wrap wrap-narrow">
+        <div class="panel-head panel-head-end">
+            <a class="btn btn-primary btn-sm" href="<?= url('articles/new') ?>"><?= et('Write an article') ?></a>
+        </div>
+        <?php if ($articles): ?>
+            <ul class="mine-list">
+                <?php foreach ($articles as $a): ?>
+                    <li>
+                        <div>
                             <a class="mine-title" href="<?= url('articles/' . $a['slug']) ?>"><?= e($a['title']) ?></a>
-                            <span class="mine-meta"><?= e($a['city']) ?>, <?= e(short_date($a['created_at'])) ?>, <?= e(tn((int) $a['views'], 'view')) ?></span>
-                            <a class="mine-edit" href="<?= url('articles/' . $a['slug'] . '/edit') ?>"><?= et('Edit') ?></a>
-                        </li>
-                    <?php endforeach ?>
-                </ul>
-            <?php else: ?>
-                <p class="mine-empty"><?= et('You have not written anything yet.') ?> <a href="<?= url('articles/new') ?>"><?= et('Write an article') ?></a></p>
-            <?php endif ?>
-        </div>
-        <div>
-            <h2><?= et('Advertisements') ?></h2>
-            <?php if ($ads): ?>
-                <ul class="mine-list">
-                    <?php foreach ($ads as $ad): ?>
-                        <li>
-                            <a class="mine-title" href="<?= url('market/' . $ad['slug']) ?>"><?= e($ad['title']) ?></a>
-                            <span class="mine-meta"><?= e($ad['city']) ?>, <?= e(price_label($ad['price'])) ?>, <?= e(short_date($ad['created_at'])) ?></span>
-                            <a class="mine-edit" href="<?= url('market/' . $ad['slug'] . '/edit') ?>"><?= et('Edit') ?></a>
-                        </li>
-                    <?php endforeach ?>
-                </ul>
-            <?php else: ?>
-                <p class="mine-empty"><?= et('You have no advertisements.') ?> <a href="<?= url('market/new') ?>"><?= et('Post an ad') ?></a></p>
-            <?php endif ?>
-        </div>
+                            <span class="mine-meta"><?= e($a['city']) ?>, <?= e($a['category']) ?>, <?= e(short_date($a['created_at'])) ?>, <?= e(tn((int) $a['views'], 'view')) ?></span>
+                        </div>
+                        <div class="mine-actions">
+                            <a class="btn btn-ghost btn-sm" href="<?= url('articles/' . $a['slug'] . '/edit') ?>"><?= et('Edit') ?></a>
+                            <form method="post" action="<?= url('articles/' . $a['slug'] . '/delete') ?>" data-confirm="<?= et('Delete this article? This cannot be undone.') ?>">
+                                <?= csrf_field() ?>
+                                <button class="btn btn-danger btn-sm" type="submit"><?= et('Delete') ?></button>
+                            </form>
+                        </div>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        <?php else: ?>
+            <div class="empty">
+                <h3><?= et('You have not written anything yet.') ?></h3>
+                <p><?= et('Your first month in Russia is someone else\'s biggest worry. Share how you handled it.') ?></p>
+                <a class="btn btn-primary" href="<?= url('articles/new') ?>"><?= et('Write an article') ?></a>
+            </div>
+        <?php endif ?>
     </div>
 </section>

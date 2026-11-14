@@ -12,7 +12,7 @@
         <h3><a href="<?= url('articles/' . $a['slug']) ?>"><?= e($a['title']) ?></a></h3>
         <p class="story-excerpt"><?= e($a['excerpt']) ?></p>
         <p class="byline">
-            <span class="avatar avatar-sm" aria-hidden="true"><?= e(initials($a['author'])) ?></span>
+            <?= avatar($a['author'], $a['author_avatar'], 'avatar-sm') ?>
             <span><?= e(implode(', ', array_filter([$a['author'], $a['university']]))) ?></span>
             <time datetime="<?= e($a['created_at']) ?>"><?= e(short_date($a['created_at'])) ?></time>
         </p>

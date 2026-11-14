@@ -62,11 +62,14 @@ $jsText = [
                     <a class="btn btn-primary btn-sm" href="<?= url('articles/new') ?>"><?= et('Write an article') ?></a>
                     <div class="menu account" data-menu>
                         <button class="avatar" type="button" aria-expanded="false" aria-haspopup="true" data-menu-btn>
-                            <span class="sr"><?= et('Account menu') ?> </span><?= e(initials($me['name'])) ?>
+                            <span class="sr"><?= et('Account menu') ?> </span><?php if ($me['avatar']): ?><img src="<?= e(upload_url($me['avatar'])) ?>" alt=""><?php else: ?><?= e(initials($me['name'])) ?><?php endif ?>
                         </button>
                         <div class="menu-panel" data-menu-panel>
                             <p class="menu-who"><strong><?= e($me['name']) ?></strong><span>@<?= e($me['username']) ?></span></p>
-                            <a href="<?= url('me') ?>"><?= et('My posts') ?></a>
+                            <a href="<?= url('me') ?>"><?= et('My articles') ?></a>
+                            <a href="<?= url('me/ads') ?>"><?= et('My advertisements') ?></a>
+                            <a href="<?= url('profile') ?>"><?= et('Profile') ?></a>
+                            <a href="<?= url('security') ?>"><?= et('Security') ?></a>
                             <?php if ($me['city_slug']): ?>
                                 <a href="<?= url('city/' . $me['city_slug']) ?>"><?= e($me['city_name']) ?></a>
                             <?php endif ?>

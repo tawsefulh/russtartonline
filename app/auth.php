@@ -18,8 +18,15 @@ function current_user(): ?array
             if ($user && ($_SESSION['pw'] ?? '') !== password_marker($user['password_hash'])) {
                 $user = null;
             }
+            if ($user && $user['deactivated_at']) {
+                $user = null;
+            }
+            // signed out from another device on the Security page
+            if ($user && !session_track_check((int) $user['id'])) {
+                $user = null;
+            }
             if (!$user) {
-                unset($_SESSION['uid'], $_SESSION['pw']);
+                unset($_SESSION['uid'], $_SESSION['pw'], $_SESSION['sid']);
             }
         }
     }
@@ -31,12 +38,24 @@ function login_user(int $id): void
     session_regenerate_id(true);
     $_SESSION['uid'] = $id;
     $_SESSION['pw'] = password_marker(q('SELECT password_hash FROM users WHERE id = ?', [$id])->fetchColumn() ?: null);
+    session_track_start($id);
 }
 
 /** Short fingerprint of the stored password: when the password changes, older sessions stop working. */
 function password_marker(?string $hash): string
 {
     return $hash ? substr(hash('sha256', $hash), 0, 16) : '';
+}
+
+/** Finish logging in: start the session, remember the device if asked, bring a deactivated account back. */
+function complete_login(int $id, bool $remember): void
+{
+    q('UPDATE users SET deactivated_at = NULL WHERE id = ?', [$id]);
+    login_user($id);
+    if ($remember) {
+        remember_issue($id);
+    }
+    redirect_after_login();
 }
 
 function require_login(): array
@@ -92,6 +111,7 @@ function remember_issue(int $userId): void
     q('INSERT INTO remember_tokens (user_id, selector, validator_hash, expires_at) VALUES (?, ?, ?, NOW() + INTERVAL ' . REMEMBER_DAYS . ' DAY)',
         [$userId, $selector, hash('sha256', $validator)]);
     remember_set_cookie("$selector:$validator", time() + REMEMBER_DAYS * 86400);
+    session_track_remember($selector);
 }
 
 function remember_login(): void
@@ -106,6 +126,7 @@ function remember_login(): void
         q('DELETE FROM remember_tokens WHERE id = ?', [$row['id']]);
     }
     if ($row && hash_equals($row['validator_hash'], hash('sha256', $m[2]))) {
+        q('DELETE FROM user_sessions WHERE remember_selector = ?', [$m[1]]);
         login_user((int) $row['user_id']);
         remember_issue((int) $row['user_id']);
         return;

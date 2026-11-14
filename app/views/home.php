@@ -5,7 +5,7 @@
     <div class="wrap hero-inner">
         <h1 class="hero-title">
             <span class="line"><span><?= et('Landing in Russia soon?') ?></span></span>
-            <span class="line"><span><?= et('Read the students') ?></span></span>
+            <span class="line"><span><?= et('Read the students') ?> <span class="hero-flag" aria-hidden="true"><?php for ($i = 0; $i < 30; $i++): ?><i style="--i:<?= $i ?>"></i><?php endfor ?></span></span></span>
             <span class="line"><span><?= et('who got there first.') ?></span></span>
         </h1>
         <p class="hero-lead"><?= et('Visas, dormitories, SIM cards, the first winter. Real experience from international students, sorted by the city you are going to.') ?></p>

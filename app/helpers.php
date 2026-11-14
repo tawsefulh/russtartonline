@@ -89,6 +89,19 @@ function csrf_check(): void
     }
 }
 
+/** A one-time confirmation shown inside a section of the next page ("Profile saved."). */
+function notice(string $key, string $message): void
+{
+    $_SESSION['notice'][$key] = $message;
+}
+
+function take_notice(string $key): ?string
+{
+    $message = $_SESSION['notice'][$key] ?? null;
+    unset($_SESSION['notice'][$key]);
+    return $message;
+}
+
 /** Value typed into a form before it failed validation. */
 function old(string $key, $default = ''): string
 {
@@ -181,6 +194,16 @@ function short_date(string $datetime): string
         return t('%s ago', tn((int) floor($diff / 86400), 'day'));
     }
     return date('j', $t) . ' ' . month_name((int) date('n', $t), true) . (date('Y') === date('Y', $t) ? '' : date(' Y', $t));
+}
+
+/** A member's round picture, or their initials when they have not uploaded one. */
+function avatar(string $name, ?string $file, string $class = ''): string
+{
+    $cls = trim('avatar ' . $class);
+    if ($file) {
+        return '<span class="' . $cls . ' has-photo" aria-hidden="true"><img src="' . e(upload_url($file)) . '" alt="" loading="lazy"></span>';
+    }
+    return '<span class="' . $cls . '" aria-hidden="true">' . e(initials($name)) . '</span>';
 }
 
 function initials(string $name): string

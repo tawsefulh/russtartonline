@@ -426,7 +426,9 @@
             if (!file) return;
             $('[data-upload-name]', box).textContent = file.name;
             if (file.type.startsWith('image/')) {
-                $('.upload-preview', box).style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+                const preview = $('.upload-preview', box);
+                preview.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+                preview.textContent = '';
             }
         });
     });
@@ -472,6 +474,7 @@
 
     // what each box accepts while typing: username = small letters and numbers, email = lowercase, no spaces
     const CLEAN = {
+        code: (v) => v.replace(/\D/g, '').slice(0, 6),
         name: (v) => v.replace(/[^\p{L}\p{M}\s]/gu, '').replace(/\s{2,}/g, ' ').replace(/^\s+/, ''),
         username: (v) => v.toLowerCase().replace(/[^a-z0-9]/g, ''),
         email: (v) => v.toLowerCase().replace(/\s+/g, ''),
@@ -571,13 +574,29 @@
                 if (!wait) timer = setTimeout(run, 450);
             });
             input.addEventListener('blur', () => { clearTimeout(timer); run(); });
-            if (input.value.trim() !== '' && !$('.field-error', field)) run();
+            // a value already in the box (your own username on Profile) is only checked once it is changed
+            lastValue = CLEAN[kind] ? CLEAN[kind](input.value) : input.value.trim().toLowerCase();
         });
 
         // do not send the form while a checked field is known to be taken or invalid
         form.addEventListener('submit', (e) => {
             const bad = $$('[data-check]', form).find((input) => results[input.dataset.check] === false);
             if (bad) { e.preventDefault(); bad.focus(); }
+        });
+    });
+
+    // QR code for the authenticator app (library loaded only on that page)
+    $$('[data-qr]').forEach((box) => {
+        if (!window.QRCode) return;
+        new window.QRCode(box, { text: box.dataset.qr, width: 168, height: 168, colorDark: '#143648', colorLight: '#FDFDFD', correctLevel: window.QRCode.CorrectLevel.M });
+        box.removeAttribute('title');
+    });
+
+    // copy backup codes
+    $$('[data-copy]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!navigator.clipboard) return;
+            navigator.clipboard.writeText(btn.dataset.copy).then(() => { btn.textContent = btn.dataset.copied; });
         });
     });
 

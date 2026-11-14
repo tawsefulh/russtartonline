@@ -108,5 +108,4 @@ $dome = function (float $cx, float $base, float $w, float $towerH): string {
 
 <canvas class="hero-snow" data-snow aria-hidden="true"></canvas>
 
-    <div class="hero-flag" aria-hidden="true"><?php for ($i = 0; $i < 30; $i++): ?><i style="--i:<?= $i ?>"></i><?php endfor ?></div>
 </div>

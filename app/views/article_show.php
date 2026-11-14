@@ -6,7 +6,7 @@
         </p>
         <h1><?= e($article['title']) ?></h1>
         <p class="byline byline-lg">
-            <span class="avatar" aria-hidden="true"><?= e(initials($article['author'])) ?></span>
+            <?= avatar($article['author'], $article['author_avatar']) ?>
             <span><strong><?= e($article['author']) ?></strong><?php if ($article['university']): ?><br><?= e($article['university']) ?><?php endif ?></span>
             <span class="byline-meta">
                 <time datetime="<?= e($article['created_at']) ?>"><?= e(long_date($article['created_at'])) ?></time><br>

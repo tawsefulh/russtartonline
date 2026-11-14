@@ -2,8 +2,7 @@
 $user = require_login();
 
 render('me', [
-    'title'    => t('My posts'),
+    'title'    => t('My articles'),
     'user'     => $user,
-    'articles' => find_posts('articles', ['user_id' => $user['id']], 100),
-    'ads'      => find_posts('ads', ['user_id' => $user['id']], 100),
+    'articles' => find_posts('articles', ['user_id' => $user['id']], 200),
 ]);

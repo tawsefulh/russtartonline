@@ -27,7 +27,7 @@
         <aside class="contact" aria-label="<?= et('Contact the seller') ?>">
             <h2><?= et('Contact the seller') ?></h2>
             <p class="byline">
-                <span class="avatar" aria-hidden="true"><?= e(initials($ad['author'])) ?></span>
+                <?= avatar($ad['author'], $ad['author_avatar']) ?>
                 <span><strong><?= e($ad['author']) ?></strong><?php if ($ad['university']): ?><br><?= e($ad['university']) ?><?php endif ?></span>
             </p>
 

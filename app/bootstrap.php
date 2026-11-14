@@ -47,6 +47,8 @@ require ROOT . '/app/i18n.php';
 require ROOT . '/app/auth.php';
 require ROOT . '/app/queries.php';
 require ROOT . '/app/mail.php';
+require ROOT . '/app/twofactor.php';
+require ROOT . '/app/sessions.php';
 
 // Restore a "keep me logged in" visitor before any page output starts
 current_user();
