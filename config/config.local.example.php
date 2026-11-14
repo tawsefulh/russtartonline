@@ -22,5 +22,13 @@ return [
     //     'client_secret' => 'xxxxxxxx',
     // ],
 
+    // Send real emails through Gmail (create an App Password in your Google account first)
+    // 'mail' => [
+    //     'driver' => 'smtp',
+    //     'from'   => 'your.address@gmail.com',
+    //     'smtp'   => ['host' => 'smtp.gmail.com', 'port' => 587, 'secure' => 'tls',
+    //                  'user' => 'your.address@gmail.com', 'pass' => 'the 16-letter app password'],
+    // ],
+
     // 'debug' => false,
 ];

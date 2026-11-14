@@ -27,6 +27,17 @@ $config = [
         'client_secret' => '',
     ],
 
+    // Email (password reset links).
+    //   'log'  saves emails to storage/mail instead of sending them (for testing on your PC)
+    //   'smtp' sends them, e.g. Gmail: host smtp.gmail.com, port 587, secure tls,
+    //          user = your Gmail address, pass = an App Password (not your normal password)
+    'mail' => [
+        'driver'    => 'log',
+        'from'      => 'no-reply@russtart.local',
+        'from_name' => 'RusStart',
+        'smtp'      => ['host' => 'smtp.gmail.com', 'port' => 587, 'secure' => 'tls', 'user' => '', 'pass' => ''],
+    ],
+
     // Show detailed PHP errors (turn off in production)
     'debug' => true,
 ];

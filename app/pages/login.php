@@ -7,10 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = mb_strtolower(post('login'));
     $password = $_POST['password'] ?? '';
 
-    $user = q('SELECT id, password_hash FROM users WHERE email = ? OR username = ?', [$login, $login])->fetch();
+    $user = q('SELECT id, name, password_hash FROM users WHERE email = ? OR username = ?', [$login, $login])->fetch();
 
     if ($user && $user['password_hash'] && is_string($password) && password_verify($password, $user['password_hash'])) {
         login_user((int) $user['id']);
+        if (post('remember') === '1') {
+            remember_issue((int) $user['id']);
+        }
+        flash('success', t('Welcome back, %s. Good to see you again.', explode(' ', $user['name'])[0]));
         redirect_after_login();
     }
 

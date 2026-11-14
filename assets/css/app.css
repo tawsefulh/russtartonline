@@ -680,6 +680,35 @@ button.avatar:hover, button.avatar[aria-expanded="true"] { box-shadow: 0 0 0 4px
 .auth-single { grid-template-columns: 1fr; }
 .auth-single .auth-card { width: min(100% - clamp(32px, 6vw, 64px), 480px); }
 
+/* "Keep me logged in" + "Forgot password?" row, and the switch link under the button */
+.login-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin: -2px 0 10px; font-size: .9375rem; }
+.login-row a { font-weight: 600; }
+.auth-switch { margin-top: 28px; text-align: center; color: var(--ink-soft); }
+.auth-switch a { font-weight: 600; }
+.auth-card > .btn-block + .auth-switch { margin-top: 20px; }
+
+.check { position: relative; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500; user-select: none; }
+.check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.check-box {
+    display: grid; place-items: center; flex: none; width: 22px; height: 22px;
+    border: 1.5px solid #AFC9D4; border-radius: 7px; background: var(--white);
+    transition: background var(--mid) var(--ease), border-color var(--mid) var(--ease), transform var(--fast) var(--ease);
+}
+.check-box::after {
+    content: ""; width: 11px; height: 6px; margin-top: -2px;
+    border-left: 2px solid var(--white); border-bottom: 2px solid var(--white);
+    transform: rotate(-45deg) scale(0); transition: transform var(--mid) var(--ease);
+}
+.check:hover .check-box { border-color: var(--navy); }
+.check:active .check-box { transform: scale(.92); }
+.check input:checked + .check-box { background: var(--navy); border-color: var(--navy); }
+.check input:checked + .check-box::after { transform: rotate(-45deg) scale(1); }
+.check input:focus-visible + .check-box { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+.dev-note { margin: -8px 0 24px; padding: 16px 18px; border-radius: var(--radius); background: #FFF4EC; border: 1px dashed #F2A47E; font-size: .9375rem; line-height: 1.5; }
+.dev-note strong { display: block; margin-bottom: 4px; }
+.dev-note a { display: inline-block; margin-top: 6px; font-weight: 600; color: var(--orange-deep); }
+
 .or { display: flex; align-items: center; gap: 16px; margin: 24px 0; color: var(--ink-soft); font-size: .875rem; }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 

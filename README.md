@@ -26,11 +26,18 @@ Built with plain PHP 8 and MySQL/MariaDB, so it runs on XAMPP and on ordinary PH
 
 The "Continue with Google" button appears only when both keys are set.
 
+## Password reset emails
+
+"Forgot password?" sends a link that works for one hour. On your PC the emails are not sent: they are saved as text files in `storage/mail`, and the page shows the link so you can test it.
+
+To send real emails, set `mail` in `config/config.local.php` (see `config.local.example.php`). With Gmail: turn on 2-step verification, create an App Password, and use host `smtp.gmail.com`, port `587`, secure `tls`.
+
 ## Put it online
 
 1. Upload everything except `.git` into the host's `htdocs` folder.
 2. Import `database/schema.sql` into the host's database.
-3. Create `config/config.local.php` on the host with its database details and `'debug' => false`.
+3. Create `config/config.local.php` on the host with its database details, the mail settings and `'debug' => false`.
+4. If the database already exists from an older version, import `database/schema.sql` again: it only adds the missing tables.
 
 ## Folders
 

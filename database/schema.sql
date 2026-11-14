@@ -79,6 +79,25 @@ CREATE TABLE IF NOT EXISTS ads (
     CONSTRAINT fk_ads_category FOREIGN KEY (category_id) REFERENCES categories(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS password_resets (
+    id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id    INT UNSIGNED NOT NULL,
+    token_hash CHAR(64)     NOT NULL UNIQUE,
+    expires_at DATETIME     NOT NULL,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_resets_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS remember_tokens (
+    id             INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id        INT UNSIGNED NOT NULL,
+    selector       CHAR(24)     NOT NULL UNIQUE,
+    validator_hash CHAR(64)     NOT NULL,
+    expires_at     DATETIME     NOT NULL,
+    created_at     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_remember_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Default cities
 INSERT IGNORE INTO cities (name, name_ru, slug, is_default) VALUES
 ('Moscow', 'Москва', 'moscow', 1),

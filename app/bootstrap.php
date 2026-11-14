@@ -28,6 +28,7 @@ define('ROUTE_PATH', $routePath);
 
 $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+define('IS_HTTPS', $https);
 define('ORIGIN', ($https ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost'));
 
 session_name('russtart');
@@ -45,6 +46,10 @@ require ROOT . '/app/helpers.php';
 require ROOT . '/app/i18n.php';
 require ROOT . '/app/auth.php';
 require ROOT . '/app/queries.php';
+require ROOT . '/app/mail.php';
+
+// Restore a "keep me logged in" visitor before any page output starts
+current_user();
 
 $errors = [];
 

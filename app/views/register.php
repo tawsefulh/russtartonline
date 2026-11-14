@@ -3,7 +3,7 @@
 
     <div class="auth-card">
         <h1><?= et('Create account') ?></h1>
-        <p class="auth-lead"><?= et('For students in Russia and the ones on their way.') ?> <?= et('Already a member?') ?> <a href="<?= url('login') ?>"><?= et('Log in') ?></a></p>
+        <p class="auth-lead"><?= et('Join the students who share what they learned about life in Russia, and help the next one arrive ready.') ?></p>
 
         <?php partial('google_button') ?>
 
@@ -15,5 +15,7 @@
             <?= field('password', t('Password'), ['type' => 'password', 'required' => true, 'attrs' => ' autocomplete="new-password" minlength="8"', 'hint' => t('At least 8 characters.')]) ?>
             <button class="btn btn-primary btn-block" type="submit"><?= et('Create account') ?></button>
         </form>
+
+        <p class="auth-switch"><?= et('Already a member?') ?> <a href="<?= url('login') ?>"><?= et('Log in') ?></a></p>
     </div>
 </section>

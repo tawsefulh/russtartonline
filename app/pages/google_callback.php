@@ -9,17 +9,34 @@ function google_fail(string $why = ''): void
 
 function http_json(string $url, ?array $post = null, array $headers = []): ?array
 {
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 15,
-        CURLOPT_HTTPHEADER     => $headers,
-    ]);
-    if ($post !== null) {
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+    $payload = $post !== null ? http_build_query($post) : null;
+
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 15,
+            CURLOPT_HTTPHEADER     => $headers,
+        ]);
+        if ($payload !== null) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        }
+        $body = curl_exec($ch);
+        curl_close($ch);
+    } else {
+        // PHP's built-in HTTPS, for servers where the curl extension is not loaded (XAMPP often)
+        if ($payload !== null) {
+            $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+        }
+        $body = @file_get_contents($url, false, stream_context_create(['http' => [
+            'method'        => $payload !== null ? 'POST' : 'GET',
+            'header'        => implode("\r\n", $headers),
+            'content'       => $payload ?? '',
+            'timeout'       => 15,
+            'ignore_errors' => true,
+        ]]));
     }
-    $body = curl_exec($ch);
-    curl_close($ch);
+
     $data = is_string($body) ? json_decode($body, true) : null;
     return is_array($data) ? $data : null;
 }
@@ -49,7 +66,7 @@ if (empty($profile['sub']) || empty($profile['email']) || empty($profile['email_
 }
 
 $email = mb_strtolower($profile['email']);
-$user = q('SELECT id, google_id FROM users WHERE google_id = ? OR email = ? ORDER BY google_id = ? DESC LIMIT 1',
+$user = q('SELECT id, name, google_id FROM users WHERE google_id = ? OR email = ? ORDER BY google_id = ? DESC LIMIT 1',
     [$profile['sub'], $email, $profile['sub']])->fetch();
 
 if ($user) {
@@ -57,6 +74,7 @@ if ($user) {
         q('UPDATE users SET google_id = ? WHERE id = ?', [$profile['sub'], $user['id']]);
     }
     login_user((int) $user['id']);
+    flash('success', t('Welcome back, %s. Good to see you again.', explode(' ', $user['name'])[0]));
     redirect_after_login();
 }
 
@@ -71,5 +89,5 @@ while (q('SELECT 1 FROM users WHERE username = ?', [$username])->fetch()) {
 q('INSERT INTO users (name, username, email, google_id) VALUES (?, ?, ?, ?)',
     [clean_name($profile['name'] ?? $base), $username, $email, $profile['sub']]);
 login_user((int) db()->lastInsertId());
-flash('success', t('Account created. Welcome to RusStart, %s.', explode(' ', clean_name($profile['name'] ?? $base))[0]));
+flash('success', t('Welcome to RusStart, %s! Your account is ready. Start by reading about your city or sharing your own story.', explode(' ', clean_name($profile['name'] ?? $base))[0]));
 redirect_after_login();

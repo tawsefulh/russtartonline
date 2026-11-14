@@ -84,7 +84,7 @@ function csrf_check(): void
 {
     $sent = $_POST['_csrf'] ?? '';
     if (!is_string($sent) || !hash_equals(csrf_token(), $sent)) {
-        http_response_code(419);
+        http_response_code(403);   // 419 is not a standard code and Apache turns it into 500
         exit(t('This form expired. Go back, refresh the page and try again.'));
     }
 }
