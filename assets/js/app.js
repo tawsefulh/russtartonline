@@ -478,6 +478,7 @@
 
     // what each box accepts while typing: username = small letters and numbers, email = lowercase, no spaces
     const CLEAN = {
+        name: (v) => v.replace(/[^\p{L}\p{M}\s]/gu, '').replace(/\s{2,}/g, ' ').replace(/^\s+/, ''),
         username: (v) => v.toLowerCase().replace(/[^a-z0-9]/g, ''),
         email: (v) => v.toLowerCase().replace(/\s+/g, ''),
     };
@@ -492,6 +493,14 @@
         const newPos = clean(before.slice(0, pos)).length;
         try { input.setSelectionRange(newPos, newPos); } catch (err) { /* email inputs do not support it */ }
     };
+
+    // boxes that are only cleaned while typing (no server check)
+    $$('[data-clean]').forEach((input) => {
+        const clean = CLEAN[input.dataset.clean];
+        if (!clean) return;
+        input.addEventListener('input', () => cleanInput(input, clean));
+        input.addEventListener('blur', () => { input.value = input.value.trim(); });
+    });
 
     $$('form[data-check-url]').forEach((form) => {
         const endpoint = form.dataset.checkUrl;

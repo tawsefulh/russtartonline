@@ -4,7 +4,7 @@ if (current_user()) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $login = mb_strtolower(post('login'));
+    $login = preg_replace('/\s+/', '', mb_strtolower(post('login')));
     $password = $_POST['password'] ?? '';
 
     $user = q('SELECT id, name, password_hash FROM users WHERE email = ? OR username = ?', [$login, $login])->fetch();

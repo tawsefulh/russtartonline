@@ -18,7 +18,7 @@
             <p class="auth-lead"><?= et('Enter the email you signed up with and we will send you a link to choose a new password.') ?></p>
             <form method="post" action="<?= url('forgot-password') ?>" novalidate>
                 <?= csrf_field() ?>
-                <?= field('email', t('Email'), ['type' => 'email', 'required' => true, 'attrs' => ' autocomplete="email" spellcheck="false"']) ?>
+                <?= field('email', t('Email'), ['type' => 'text', 'required' => true, 'attrs' => ' autocomplete="email" inputmode="email" spellcheck="false" autocapitalize="none" data-clean="email"']) ?>
                 <button class="btn btn-primary btn-block" type="submit"><?= et('Send reset link') ?></button>
             </form>
             <p class="auth-switch"><?= et('Remembered it?') ?> <a href="<?= url('login') ?>"><?= et('Log in') ?></a></p>

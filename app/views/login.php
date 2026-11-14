@@ -9,7 +9,7 @@
 
         <form method="post" action="<?= url('login') ?>" novalidate>
             <?= csrf_field() ?>
-            <?= field('login', t('Email or username'), ['required' => true, 'attrs' => ' autocomplete="username" autocapitalize="none" spellcheck="false"']) ?>
+            <?= field('login', t('Email or username'), ['required' => true, 'attrs' => ' autocomplete="username" autocapitalize="none" spellcheck="false" data-clean="email"']) ?>
             <?= field('password', t('Password'), ['type' => 'password', 'required' => true, 'attrs' => ' autocomplete="current-password"']) ?>
             <div class="login-row">
                 <label class="check">

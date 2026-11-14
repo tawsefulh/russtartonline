@@ -4,7 +4,7 @@ if (current_user()) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name       = clean_name(post('name'));
+    $name       = clean_name(preg_replace('/[^\p{L}\p{M}\s]/u', '', post('name')));
     $username   = preg_replace('/\s+/', '', mb_strtolower(post('username')));
     $email      = preg_replace('/\s+/', '', mb_strtolower(post('email')));
     $password   = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';

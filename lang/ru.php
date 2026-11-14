@@ -240,6 +240,7 @@ return [
     'At least 4 characters. Small letters and numbers only.' => 'Не меньше 4 символов. Только строчные латинские буквы и цифры.',
     'Use at least 4 characters: small letters and numbers only.' => 'Не меньше 4 символов: только строчные латинские буквы и цифры.',
     'Use at least 8 characters, with at least one small and one capital letter.' => 'Не меньше 8 символов, хотя бы одна строчная и одна заглавная буква.',
+    'Letters and spaces only.' => 'Только буквы и пробелы.',
     'Password rules' => 'Требования к паролю',
     'At least 8 characters' => 'Не меньше 8 символов',
     'One small letter' => 'Одна строчная буква',
