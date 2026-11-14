@@ -29,10 +29,10 @@ $routes = [
     '#^/language/(en|ru)$#'           => 'lang',
     '#^/login$#'                      => 'login',
     '#^/register$#'                   => 'register',
+    '#^/check$#'                      => 'check',
     '#^/logout$#'                     => 'logout',
     '#^/auth/google$#'                => 'google',
     '#^/auth/google/callback$#'       => 'google_callback',
-    '#^/complete-profile$#'           => 'complete_profile',
     '#^/me$#'                         => 'me',
     '#^/articles$#'                   => 'articles',
     '#^/articles/new$#'               => 'article_form',
@@ -50,12 +50,6 @@ $routes = [
 foreach ($routes as $pattern => $page) {
     if (preg_match($pattern, $path, $m)) {
         $params = array_slice($m, 1);
-
-        // People who signed up with Google still owe us a city and university
-        $u = current_user();
-        if ($u && (!$u['city_id'] || !$u['university']) && !in_array($page, ['complete_profile', 'logout', 'lang'], true)) {
-            redirect('complete-profile');
-        }
 
         require ROOT . "/app/pages/$page.php";
         exit;

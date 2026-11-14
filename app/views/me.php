@@ -2,7 +2,7 @@
     <div class="wrap page-head-row">
         <div>
             <h1><?= et('My posts') ?></h1>
-            <p class="page-lead"><?= e($user['name']) ?>, <?= e($user['university']) ?>, <?= e($user['city_name']) ?></p>
+            <p class="page-lead"><?= e(implode(', ', array_filter([$user['name'], '@' . $user['username'], $user['city_name']]))) ?></p>
         </div>
         <p class="page-jump">
             <a class="btn btn-ghost" href="<?= url('market/new') ?>"><?= et('Post an ad') ?></a>

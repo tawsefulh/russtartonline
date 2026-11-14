@@ -60,7 +60,7 @@ if ($user) {
     redirect_after_login();
 }
 
-// New person: make a username from the email, then ask for city and university
+// New person: make a username from the email
 $base = substr(preg_replace('/[^a-z0-9_]/', '', strtolower(strstr($email, '@', true))), 0, 24);
 $base = strlen($base) >= 3 ? $base : 'student';
 $username = $base;
@@ -71,4 +71,5 @@ while (q('SELECT 1 FROM users WHERE username = ?', [$username])->fetch()) {
 q('INSERT INTO users (name, username, email, google_id) VALUES (?, ?, ?, ?)',
     [clean_name($profile['name'] ?? $base), $username, $email, $profile['sub']]);
 login_user((int) db()->lastInsertId());
-redirect('complete-profile');
+flash('success', t('Account created. Welcome to RusStart, %s.', explode(' ', clean_name($profile['name'] ?? $base))[0]));
+redirect_after_login();

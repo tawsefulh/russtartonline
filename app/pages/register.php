@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username   = mb_strtolower(post('username'));
     $email      = mb_strtolower(post('email'));
     $password   = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
-    $university = trim(preg_replace('/\s+/u', ' ', post('university')));
 
     if (mb_strlen($name) < 2 || mb_strlen($name) > 100) {
         $errors['name'] = t('Enter your full name.');
@@ -24,14 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (strlen($password) < 8) {
         $errors['password'] = t('Use at least 8 characters.');
     }
-    if (mb_strlen($university) < 2 || mb_strlen($university) > 160) {
-        $errors['university'] = t('Enter your university.');
-    }
-    $cityId = resolve_city();
 
     if (!$errors) {
-        q('INSERT INTO users (name, username, email, password_hash, city_id, university) VALUES (?, ?, ?, ?, ?, ?)',
-            [$name, $username, $email, password_hash($password, PASSWORD_DEFAULT), $cityId, $university]);
+        q('INSERT INTO users (name, username, email, password_hash) VALUES (?, ?, ?, ?)',
+            [$name, $username, $email, password_hash($password, PASSWORD_DEFAULT)]);
         login_user((int) db()->lastInsertId());
         flash('success', t('Account created. Welcome to RusStart, %s.', explode(' ', $name)[0]));
         redirect_after_login();
@@ -40,6 +35,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 render('register', [
     'title'     => t('Create account'),
-    'cities'    => all_cities(),
     'bodyClass' => 'is-auth',
 ]);

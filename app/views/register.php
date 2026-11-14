@@ -7,18 +7,12 @@
 
         <?php partial('google_button') ?>
 
-        <form method="post" action="<?= url('register') ?>" novalidate>
+        <form method="post" action="<?= url('register') ?>" novalidate data-check-url="<?= url('check') ?>">
             <?= csrf_field() ?>
             <?= field('name', t('Full name'), ['required' => true, 'attrs' => ' autocomplete="name" maxlength="100"']) ?>
-            <div class="field-pair">
-                <?= field('username', t('Username'), ['required' => true, 'attrs' => ' autocomplete="username" maxlength="30" autocapitalize="none"', 'hint' => t('Lowercase letters, numbers, underscore.')]) ?>
-                <?= field('email', t('Email'), ['type' => 'email', 'required' => true, 'attrs' => ' autocomplete="email"']) ?>
-            </div>
+            <?= field('username', t('Username'), ['required' => true, 'attrs' => ' autocomplete="username" maxlength="30" autocapitalize="none" spellcheck="false" data-check="username"', 'hint' => t('Lowercase letters, numbers, underscore.')]) ?>
+            <?= field('email', t('Email'), ['type' => 'email', 'required' => true, 'attrs' => ' autocomplete="email" spellcheck="false" data-check="email"']) ?>
             <?= field('password', t('Password'), ['type' => 'password', 'required' => true, 'attrs' => ' autocomplete="new-password" minlength="8"', 'hint' => t('At least 8 characters.')]) ?>
-            <div class="field-pair">
-                <?= select_field('city', t('City in Russia'), $cities, ['other' => t('Other city'), 'other_label' => t('Your city')]) ?>
-                <?php partial('university_field') ?>
-            </div>
             <button class="btn btn-primary btn-block" type="submit"><?= et('Create account') ?></button>
         </form>
     </div>

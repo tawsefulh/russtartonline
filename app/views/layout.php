@@ -11,6 +11,7 @@ $jsText = [
     'showPass'   => t('Show password'),
     'hidePass'   => t('Hide password'),
     'notChosen'  => t('not chosen'),
+    'checking'   => t('Checking…'),
 ];
 ?>
 <!doctype html>

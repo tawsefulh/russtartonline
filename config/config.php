@@ -29,35 +29,6 @@ $config = [
 
     // Show detailed PHP errors (turn off in production)
     'debug' => true,
-
-    // Suggestions shown in the university field. People can type any other.
-    'universities' => [
-        'Lomonosov Moscow State University (MSU)',
-        'HSE University',
-        'RUDN University',
-        'Bauman Moscow State Technical University',
-        'Moscow Institute of Physics and Technology (MIPT)',
-        'Sechenov University',
-        'Pirogov Russian National Research Medical University',
-        'MGIMO University',
-        'Saint Petersburg State University (SPbU)',
-        'ITMO University',
-        'Peter the Great St. Petersburg Polytechnic University',
-        'Kazan Federal University (KFU)',
-        'Kazan State Medical University',
-        'Novosibirsk State University (NSU)',
-        'Tomsk State University (TSU)',
-        'Tomsk Polytechnic University (TPU)',
-        'Ural Federal University (UrFU)',
-        'Lobachevsky University (UNN)',
-        'Samara University',
-        'Southern Federal University',
-        'Kursk State Medical University',
-        'Far Eastern Federal University (FEFU)',
-        'Immanuel Kant Baltic Federal University',
-        'Belgorod State University',
-        'Voronezh State University',
-    ],
 ];
 
 $local = __DIR__ . '/config.local.php';
